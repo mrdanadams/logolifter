@@ -30,7 +30,29 @@ APP.Search = (->
 	google.setOnLoadCallback -> obj.init()
 
 	obj
-)()	
+)()
+
+APP.Canvas = (->
+	ctx = null
+
+	obj = {
+		init: ->
+			ctx = $('#canvas').get(0).getContext('2d')
+			this.addImage 'http://t2.gstatic.com/images?q=tbn:ANd9GcSSRIcB7epzREylpl1gQ6ZYo9Vw8iJA-DH9PrDYh5_8QrbwfNLDEZM-og', 10, 10
+			
+
+		addImage: (src, x, y) ->
+			img = new Image()
+			img.onload = ->
+				ctx.drawImage img, x, y
+
+			img.src = src
+	}
+
+	$(-> obj.init())
+	obj
+)()
+
 
 $(->
 	$('#search-form form').submit((event) -> false)
