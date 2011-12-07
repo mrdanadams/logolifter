@@ -8,6 +8,7 @@
 
 	<script src="https://www.google.com/jsapi?key=ABQIAAAA3eFefIMseom8tS_G04V1-hT2yXp_ZAY8_ufC3CFXhHIE1NvwkxTVDYZ5-LrKjKjMxRY2jDzndCCrSQ"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 	<script src="http://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.0.beta.4.js"></script>
 	<script src="js/app.js"></script>
 
@@ -17,7 +18,7 @@
 <div class="image-result">
 	<ul class="media-grid">
 	{{#each this}}
-		<li><a href="#"><img class="thumbnail" src="{{tbUrl}}" /><span class="dimensions">{{width}}x{{height}}</span></a></li>
+		<li><a href="#"><img class="thumbnail" src="{{tbUrl}}" data-src="{{unescapedUrl}}" /><span class="dimensions">{{width}}x{{height}}</span></a></li>
 	{{/each}}
 	</ul>
 </div>

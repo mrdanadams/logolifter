@@ -13,6 +13,15 @@
       },
       handleResults: function() {
         $('#image-results .images').empty().append(imageTemplate(imageSearch.results));
+        $('.image-result a').draggable({
+          helper: function() {
+            var img;
+            img = new Image();
+            img.src = $('img', this).data('src');
+            return img;
+          },
+          opacity: .6
+        });
         return google.search.Search.getBranding('google-branding');
       },
       search: function(q) {
@@ -30,8 +39,23 @@
     ctx = null;
     obj = {
       init: function() {
-        ctx = $('#canvas').get(0).getContext('2d');
-        return this.addImage('http://t2.gstatic.com/images?q=tbn:ANd9GcSSRIcB7epzREylpl1gQ6ZYo9Vw8iJA-DH9PrDYh5_8QrbwfNLDEZM-og', 10, 10);
+        var canvas, inst;
+        canvas = $('#canvas');
+        ctx = canvas.get(0).getContext('2d');
+        inst = this;
+        return canvas.droppable({
+          accept: '.image-result a',
+          activeClass: 'drop-highlight',
+          drop: function(event, ui) {
+            var canvasPos, imgPos, src, x, y;
+            imgPos = ui.position;
+            canvasPos = $('#canvas').position();
+            x = imgPos.left - canvasPos.left;
+            y = imgPos.top - canvasPos.top;
+            src = $(event.target).attr('src');
+            return inst.addImage(src, x, y);
+          }
+        });
       },
       addImage: function(src, x, y) {
         var img;
