@@ -2,15 +2,17 @@
   var APP;
   this.APP = APP = {};
   APP.Search = (function() {
-    var imageSearch, obj;
+    var imageSearch, imageTemplate, obj;
     imageSearch = null;
+    imageTemplate = null;
     obj = {
       init: function() {
         imageSearch = new google.search.ImageSearch();
-        return imageSearch.setSearchCompleteCallback(this, this.handleResults, null);
+        imageSearch.setSearchCompleteCallback(this, this.handleResults, null);
+        return imageTemplate = Handlebars.compile($('#image-template').html());
       },
       handleResults: function() {
-        console.log(imageSearch.results);
+        $('#image-results .images').empty().append(imageTemplate(imageSearch.results));
         return google.search.Search.getBranding('google-branding');
       },
       search: function(q) {
