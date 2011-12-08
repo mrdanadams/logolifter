@@ -13,11 +13,10 @@ APP.Search = (->
 
 		handleResults: ->
 			# todo: handle no results
-#			for result in imageSearch.results
-#				$('#image-results .images').append result.html.cloneNode(true)
 			$('#image-results .images').empty().append imageTemplate(imageSearch.results)
 
 			# TODO put in the current image while the other is loading
+			# TODO move out to a UI class
 			$('.image-result a').draggable({
 				helper: ->
 					# creates an image that is the full image to be dragged so it's more representative
@@ -25,11 +24,11 @@ APP.Search = (->
 					img.src = $('img', this).data('src')
 					img
 
+
 				opacity: .6
 				
 			})
 
-			#console.log imageSearch.results
 			# todo: only do this once
 			google.search.Search.getBranding 'google-branding'
 
@@ -54,6 +53,7 @@ APP.Canvas = (->
 
 			# TODO pulse the canvas border opacity while you are dragging
 			inst = this
+			# TODO move out to a UI object
 			canvas.droppable({
 				accept: '.image-result a'
 				activeClass: 'drop-highlight'
@@ -74,6 +74,9 @@ APP.Canvas = (->
 				ctx.drawImage img, x, y
 
 			img.src = src
+
+		download: ->
+			Canvas2Image.saveAsPNG $('#canvas').get(0)
 	}
 
 	$(-> obj.init())
@@ -92,4 +95,15 @@ $(->
 		#
 		# hide the help
 	)
+
+	$('#download').click(-> APP.Canvas.download() )
+
+	# seeing if this works...
+	$.getImageData {
+		url: "http://www.maths.nott.ac.uk/personal/sc/images/SteveC.jpg"
+		success: (image) ->
+			APP.Canvas.addImage image.src, 10, 10
+		
+		error: (xhr, text_status) ->
+	}
 )

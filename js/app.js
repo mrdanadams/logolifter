@@ -64,6 +64,9 @@
           return ctx.drawImage(img, x, y);
         };
         return img.src = src;
+      },
+      download: function() {
+        return Canvas2Image.saveAsPNG($('#canvas').get(0));
       }
     };
     $(function() {
@@ -75,10 +78,20 @@
     $('#search-form form').submit(function(event) {
       return false;
     });
-    return $('#q').on('keydown', function(event) {
+    $('#q').on('keydown', function(event) {
       if (event.keyCode === 13) {
         return APP.Search.search($(this).val());
       }
+    });
+    $('#download').click(function() {
+      return APP.Canvas.download();
+    });
+    return $.getImageData({
+      url: "http://www.maths.nott.ac.uk/personal/sc/images/SteveC.jpg",
+      success: function(image) {
+        return APP.Canvas.addImage(image.src, 10, 10);
+      },
+      error: function(xhr, text_status) {}
     });
   });
 }).call(this);

@@ -6,10 +6,13 @@
 	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
 	<link rel="stylesheet" href="css/style.css" />
 
-	<script src="https://www.google.com/jsapi?key=ABQIAAAA3eFefIMseom8tS_G04V1-hT2yXp_ZAY8_ufC3CFXhHIE1NvwkxTVDYZ5-LrKjKjMxRY2jDzndCCrSQ"></script>
+	<script src="https://www.google.com/jsapi?key=ABQIAAAA3eFefIMseom8tS_G04V1-hQ44lOeDQlX1UATTfCmEIxb6eByxRSVlEHYPipySEYkf6gREPsWCR_wRg"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 	<script src="http://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.0.beta.4.js"></script>
+	<script src="js/canvas2image.js"></script>
+	<script src="js/base64.js"></script>
+	<script src="js/jquery.getimagedata.min.js"></script>
 	<script src="js/app.js"></script>
 
 </head>
@@ -55,10 +58,11 @@
 <div id="image-editor">
 	<h2>Create Your Image</h2>
 	<canvas id="canvas" width="600" height="600"></canvas>
-	<button>Download Image</button>
+	<button id="download">Download Image</button>
 </div>
 
 <!-- todo: move this up top and allow it to close -->
+<!-- TODO: add marketing guy quote -->
 <div id="about">
 	<h2>About</h2>
 	<p>For bloggers in particular, having something visual in your blog posts is a rule. Finding images relevant to your posts can be difficult especially if covering multiple subjects. This tool creates nice images using others found by searching.</p>
