@@ -1,1 +1,42 @@
-#canvas { border: 1px solid #ccc; }
+/* line 3, ../sass/style.scss */
+#canvas {
+  border: 3px dashed #ccc;
+}
+
+/* line 4, ../sass/style.scss */
+body {
+  padding-top: 40px;
+}
+
+/* line 6, ../sass/style.scss */
+.topbar {
+  position: absolute;
+}
+
+/* line 8, ../sass/style.scss */
+.step {
+  padding: .25em;
+  border: 2px solid #ccc;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
+  -ms-border-radius: 1em;
+  -o-border-radius: 1em;
+  border-radius: 1em;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
+  text-align: center;
+  margin: .125em;
+  margin-left: -2em;
+}
+
+/* line 23, ../sass/style.scss */
+#q {
+  width: 80%;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
+  -ms-border-radius: 1em;
+  -o-border-radius: 1em;
+  border-radius: 1em;
+}

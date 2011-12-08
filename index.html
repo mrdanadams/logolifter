@@ -17,6 +17,7 @@
 
 </head>
 <body>
+
 <script id="image-template" type="text/x-handlebars-template">
 <div class="image-result">
 	<ul class="media-grid">
@@ -27,20 +28,34 @@
 </div>
 </script>
 
+<div id="header" class="topbar"><div class="fill"><div class="container">
+	<h3><a href="/">Logo Lifter</a></h3>
+	<!-- <h2>Create new images from old ones</h2> -->
+	<ul class="nav">
+		<li><a href="#about" class="about">About</a></li>
+	</ul>
+</div></div></div>
+
 <div class="container">
 
-<div id="header" class="row">
-	<div class="logo span3">
-		<h1>Logo Lifter</h1>
-		<h2>Create new images from old ones</h2>
-	</div>
-	<div id="search-form" class="search-form span13">
-		<form action="#">
-			<input type="search" id="q" placeholder="Enter image search..." autocomplete="off" />
-		</form>
-	</div>
+<!-- TODO: add marketing guy quote -->
+<div id="about" style="display: none;">
+	<h2>About</h2>
+	<p>For bloggers in particular, having something visual in your blog posts is a rule. Finding images relevant to your posts can be difficult especially if covering multiple subjects. This tool creates nice images using others found by searching.</p>
 
+	<p>This tool was created by <a href="http://mrdanadams.com" target="_blank">Dan Adams</a>, a software engineer and technical consultant at <a href="http://cantina.co" target="_blank">Cantina Consulting.</a></p>
+
+	<p>Please don't steal images: check and respect the license of any images used and reference the image sources in your final material.</p>
 </div>
+
+<div id="search-form" class="search-form">
+	<h2><span class="step">1</span> Search for images</h2>
+
+	<form action="#">
+		<input type="search" id="q" placeholder="Enter terms and hit enter..." autocomplete="off" />
+	</form>
+</div>
+
 <div id="help" style="display: none;">
 	<!--
 		search above
@@ -50,27 +65,20 @@
 		save!
 	-->
 </div>
-<div id="image-results" class="row">
-	<h2>Drag images to the canvas</h2>
+<div id="image-results" class="">
+	<h2><span class="step">2</span> Drag images into the image below</h2>
 	<div class="images"></div>
 	<div id="google-branding"></div>
 </div>
 <div id="image-editor">
-	<h2>Create Your Image</h2>
+	<h2><span class="step">3</span> Customize your image</h2>
 	<canvas id="canvas" width="600" height="600"></canvas>
-	<button id="download">Download Image</button>
+</div>
+<div>
+	<h2><span class="step">4</span> Save the image</h2>
+	<button id="download" class="btn large primary">Download Image</button>
 </div>
 
-<!-- todo: move this up top and allow it to close -->
-<!-- TODO: add marketing guy quote -->
-<div id="about">
-	<h2>About</h2>
-	<p>For bloggers in particular, having something visual in your blog posts is a rule. Finding images relevant to your posts can be difficult especially if covering multiple subjects. This tool creates nice images using others found by searching.</p>
-
-	<p>This tool was created by <a href="http://mrdanadams.com" target="_blank">Dan Adams</a>, a software engineer and technical consultant at <a href="http://cantina.co" target="_blank">Cantina Consulting.</a></p>
-
-	<p>Please don't steal images: check and respect the license of any images used and reference the image sources in your final material.</p>
-</div>
 
 </div>
 </body>

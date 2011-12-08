@@ -1,0 +1,26 @@
+@import "compass/css3";
+
+#canvas { border: 3px dashed #ccc; }
+body { padding-top: 40px; }
+
+.topbar { position: absolute; }
+
+.step {
+	padding: .25em;
+	border: 2px solid #ccc;
+	@include border-radius(1em);
+	display: inline-block;
+	width: 1em; height: 1em;
+	line-height: 1em;
+	text-align: center;
+	margin: .125em;
+	margin-left: -2em;
+}
+
+#search-form {
+	
+}
+#q {
+	width: 80%;
+	@include border-radius(1em);
+}

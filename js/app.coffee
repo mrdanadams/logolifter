@@ -83,7 +83,19 @@ APP.Canvas = (->
 	obj
 )()
 
-
+# TODOs
+# include more images in the results
+# color the number bubbles and put shadows on them
+# style the about box
+# make the about link toggle, not show, the box
+# put a close link in the about box
+# put some links in the header to me, twitter, and cantina
+# add a credits section
+# change the canvas dimensions
+# add a spinner when results are loading
+# add descriptive text to each section
+# style the logo to be a custom font. perhaps something scripty. make the "lifter" superscript.
+# when the page loads make the "lifter" animate upwards slowly
 
 $(->
 	$('#search-form form').submit((event) -> false)
@@ -96,14 +108,18 @@ $(->
 		# hide the help
 	)
 
-	$('#download').click(-> APP.Canvas.download() )
+	$('#download').click -> APP.Canvas.download()
+
+	$('.topbar a.about').click -> 
+		$('#about').slideDown()
+		false
 
 	# seeing if this works...
-	$.getImageData {
-		url: "http://www.maths.nott.ac.uk/personal/sc/images/SteveC.jpg"
-		success: (image) ->
-			APP.Canvas.addImage image.src, 10, 10
+	# $.getImageData {
+	# 	url: "http://www.maths.nott.ac.uk/personal/sc/images/SteveC.jpg"
+	# 	success: (image) ->
+	# 		APP.Canvas.addImage image.src, 10, 10
 		
-		error: (xhr, text_status) ->
-	}
+	# 	error: (xhr, text_status) ->
+	# }
 )

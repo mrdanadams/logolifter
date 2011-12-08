@@ -86,12 +86,9 @@
     $('#download').click(function() {
       return APP.Canvas.download();
     });
-    return $.getImageData({
-      url: "http://www.maths.nott.ac.uk/personal/sc/images/SteveC.jpg",
-      success: function(image) {
-        return APP.Canvas.addImage(image.src, 10, 10);
-      },
-      error: function(xhr, text_status) {}
+    return $('.topbar a.about').click(function() {
+      $('#about').slideDown();
+      return false;
     });
   });
 }).call(this);
