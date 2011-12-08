@@ -1,6 +1,5 @@
 @import "compass/css3";
 
-#canvas { border: 3px dashed #ccc; }
 body { padding-top: 40px; }
 
 .topbar { position: absolute; }
@@ -30,3 +29,34 @@ body { padding-top: 40px; }
 	a { text-decoration: none !important; }
 }
 .dimensions { color: #aaa; }
+
+@mixin pulse {
+	0% { border-color: #fff * .8 }
+	50% { border-color: #fff * .2 }
+	100% { border-color: #fff * .8 }
+}
+@-webkit-keyframes pulse { @include pulse }
+@-moz-keyframes pulse { @include pulse }
+@-o-keyframes pulse { @include pulse }
+@-ms-keyframes pulse { @include pulse }
+
+@mixin prefix($name, $expr) {
+	-webkit-#{$name}: $expr;
+	-moz-#{$name}: $expr;
+	-o-#{$name}: $expr;
+	-ms-#{$name}: $expr;
+}
+
+#canvas { 
+	border: 3px dashed #fff * .8;
+	/*@include single-transition(border-color, 1s, ease, 0);*/
+	/*-webkit-animation-iteration-count: 100;*/
+	/*-webkit-animation-name: pulse;*/
+
+	&.drop-highlight {
+		@include prefix(animation, pulse 1s infinite);
+		border-color: #fff * .2;
+	}
+
+}
+

@@ -16,10 +16,9 @@ APP.Search = (->
 
 		handleResults: ->
 			# todo: handle no results
+			# TODO move out to a UI class
 			$('#image-results .images').empty().append imageTemplate(imageSearch.results)
 
-			# TODO put in the current image while the other is loading
-			# TODO move out to a UI class
 			$('.image-result a').draggable({
 				helper: ->
 					# creates an image that is the full image to be dragged so it's more representative
@@ -54,7 +53,6 @@ APP.Canvas = (->
 			canvas = $('#canvas')
 			ctx = canvas.get(0).getContext('2d')
 
-			# TODO pulse the canvas border opacity while you are dragging
 			inst = this
 			# TODO move out to a UI object
 			canvas.droppable({
@@ -87,27 +85,33 @@ APP.Canvas = (->
 )()
 
 # TODOs
-# include more images in the results
+# pulse the canvas border opacity while you are dragging
+# put in the current image while the other is loading when dragging the image
+# add a spinner when results are loading (they are really fast...)
+# add buttons restricting search by size (none, icon, small, medium)
+# change the canvas dimensions
+# add searching by color?
+# download all the images
+
+# allow setting image order via drag and drop (show icons next to each image)
+# add text box for the dimensions to resize to (never size an image up)
+# allow cropping the image
+# allow arranging the images differently: star, circle, square, horizontal, vertical
+# show / hide guides
+# show / hide ruler
+
+# add some styling to the background / sections to separate the page
 # color the number bubbles and put shadows on them
 # style the about box
 # make the about link toggle, not show, the box
 # put a close link in the about box
-# put some links in the header to me, twitter, and cantina
-# add a credits section
-# change the canvas dimensions
-# add a spinner when results are loading
-# add descriptive text to each section
 # style the logo to be a custom font. perhaps something scripty. make the "lifter" superscript.
 # when the page loads make the "lifter" animate upwards slowly
-# add buttons restricting search by size (default = medium)
-# add searching by color?
-# allow setting image order
-# add some styling to the background / sections to separate the page
 
-# stuff i want to do to images
-# arrange them
-# make them all the same size
-# 
+# put some links in the header to me, twitter, and cantina
+# add a credits section
+# add descriptive text to each section
+
 
 $(->
 	$('#search-form form').submit((event) -> false)
