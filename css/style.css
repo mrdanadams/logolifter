@@ -40,3 +40,17 @@ body {
   -o-border-radius: 1em;
   border-radius: 1em;
 }
+
+/* line 29, ../sass/style.scss */
+.media-grid li {
+  text-align: center;
+}
+/* line 30, ../sass/style.scss */
+.media-grid a {
+  text-decoration: none !important;
+}
+
+/* line 32, ../sass/style.scss */
+.dimensions {
+  color: #aaa;
+}

@@ -9,6 +9,9 @@ APP.Search = (->
 		init: ->
 			imageSearch = new google.search.ImageSearch()
 			imageSearch.setSearchCompleteCallback this, this.handleResults, null
+			imageSearch.setResultSetSize 6	# equivalent to 1 row
+			#imageSearch.setRestriction google.search.ImageSearch.RESTRICT_IMAGESIZE, google.search.ImageSearch.IMAGESIZE_MEDIUM
+
 			imageTemplate = Handlebars.compile $('#image-template').html()
 
 		handleResults: ->
@@ -96,6 +99,15 @@ APP.Canvas = (->
 # add descriptive text to each section
 # style the logo to be a custom font. perhaps something scripty. make the "lifter" superscript.
 # when the page loads make the "lifter" animate upwards slowly
+# add buttons restricting search by size (default = medium)
+# add searching by color?
+# allow setting image order
+# add some styling to the background / sections to separate the page
+
+# stuff i want to do to images
+# arrange them
+# make them all the same size
+# 
 
 $(->
 	$('#search-form form').submit((event) -> false)

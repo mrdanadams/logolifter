@@ -24,3 +24,9 @@ body { padding-top: 40px; }
 	width: 80%;
 	@include border-radius(1em);
 }
+
+.media-grid {
+	li { text-align: center; }
+	a { text-decoration: none !important; }
+}
+.dimensions { color: #aaa; }

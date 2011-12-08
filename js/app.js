@@ -9,6 +9,7 @@
       init: function() {
         imageSearch = new google.search.ImageSearch();
         imageSearch.setSearchCompleteCallback(this, this.handleResults, null);
+        imageSearch.setResultSetSize(6);
         return imageTemplate = Handlebars.compile($('#image-template').html());
       },
       handleResults: function() {
