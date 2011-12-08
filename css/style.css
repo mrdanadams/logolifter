@@ -125,11 +125,16 @@ body {
   /*-webkit-animation-iteration-count: 100;*/
   /*-webkit-animation-name: pulse;*/
 }
-/* line 56, ../sass/style.scss */
+/* line 57, ../sass/style.scss */
 #canvas.drop-highlight {
   -webkit-animation: pulse 1s infinite;
   -moz-animation: pulse 1s infinite;
   -o-animation: pulse 1s infinite;
   -ms-animation: pulse 1s infinite;
   border-color: #333333;
+}
+
+/* line 65, ../sass/style.scss */
+.controls .size {
+  width: 3em;
 }

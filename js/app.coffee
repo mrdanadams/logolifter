@@ -1,5 +1,6 @@
 this.APP = APP = {}
 
+# Handles performing the search
 APP.Search = (->
 	imageSearch = null
 	imageTemplate = null
@@ -22,10 +23,11 @@ APP.Search = (->
 			$('.image-result a').draggable({
 				helper: ->
 					# creates an image that is the full image to be dragged so it's more representative
-					img = new Image()
-					img.src = $('img', this).data('src')
-					img
-
+					srcImage = $('img', this)
+					img = srcImage.clone()
+					img.attr 'src', srcImage.attr('data-src')
+					img.data 'thumb-src', srcImage.attr('src')
+					img.get(0)
 
 				opacity: .6
 				
@@ -45,17 +47,31 @@ APP.Search = (->
 	obj
 )()
 
+# Maintains state and controls the canvas / drawing area
 APP.Canvas = (->
 	ctx = null
+	canvas = null
+	images = [] # images currently on the canvas
+
+	dragImg =  null	# image being dragged
+	dragX = null
+	dragY = null
+
+	inst = null
 
 	obj = {
 		init: ->
-			canvas = $('#canvas')
-			ctx = canvas.get(0).getContext('2d')
+			canvas = $('#canvas').get(0)
+			ctx = canvas.getContext('2d')
 
 			inst = this
 			# TODO move out to a UI object
-			canvas.droppable({
+			jc = $('#canvas')
+
+			for name in ['mousemove', 'mouseup', 'mousedown']
+				jc.bind name, inst[name]
+
+			jc.droppable({
 				accept: '.image-result a'
 				activeClass: 'drop-highlight'
 				drop: (event, ui) ->
@@ -65,33 +81,98 @@ APP.Canvas = (->
 					y = imgPos.top - canvasPos.top
 					src = $(event.target).attr('src')
 
-					inst.addImage src, x, y
+					inst.addImage event.target, x, y
 			})
 
-		# TODO maintain a model that gets redrawn
-		addImage: (src, x, y) ->
-			img = new Image()
-			img.onload = ->
-				ctx.drawImage img, x, y
+		mousedown: (event) ->
+			# console.log event
+			x = event.offsetX
+			y = event.offsetY
 
-			img.src = src
+			for img in images
+				if x >= img.x and y >= img.y and x <= img.x + img.width and y <= img.y + img.height
+					 dragImg = img
+					 dragX = x - img.x
+					 dragY = y - img.y
+
+		mousemove: (event) ->
+			return if dragImg == null
+			dragImg.x = event.offsetX - dragX
+			dragImg.y = event.offsetY - dragY
+			inst.redraw()
+
+		mouseup: ->
+			dragImg = null
+			inst.redraw()
+		
+
+		# dropped is the image dropped onto the canvas
+		addImage: (dropped, x, y) ->
+			dropped = $(dropped)
+			img = new APP.Canvas.Img dropped.attr('src'), dropped.data('thumb-src'), dropped.data('width'), dropped.data('height'), x, y, ctx
+			#console.log(img)
+			images.unshift img
+			this.redraw()
 
 		download: ->
 			Canvas2Image.saveAsPNG $('#canvas').get(0)
+
+		# clears and redraws the whole canvas
+		redraw: ->
+			ctx.clearRect 0, 0, canvas.width, canvas.height
+			image.draw(ctx) for image in images
+
 	}
 
 	$(-> obj.init())
 	obj
 )()
 
+# Model for an image placed on the canvas
+APP.Canvas.Img = (->
+	cls = (src, thumbSrc, width, height, x, y, ctx) ->
+		this.safe = false	 # whether it's been pulled from a different origin
+		this.src = src
+		this.thumbSrc = thumbSrc
+		this.width = width
+		this.height = height
+		this.x = x
+		this.y = y
+		this.scale = 1		# for constraining size
+
+		# image drawn onto the canvas
+		this.img = img = new Image()
+		this.loaded = false
+		inst = this
+		img.onload = -> 
+			inst.loaded = true
+			inst.draw(ctx)
+		img.src = src
+
+		this
+
+	cls.prototype = 
+		# draws itself onto the canvas
+		draw: (ctx) ->
+			ctx.drawImage this.img, this.x, this.y if this.loaded
+			
+	cls
+)()
+
+
+
+
 # TODOs
-# pulse the canvas border opacity while you are dragging
 # put in the current image while the other is loading when dragging the image
 # add a spinner when results are loading (they are really fast...)
 # add buttons restricting search by size (none, icon, small, medium)
 # change the canvas dimensions
 # add searching by color?
 # download all the images
+# add tooltip text to the controls
+# remove images from the canvas
+# allow opening the current image in pixlr
+# allow adding a specific URL
 
 # allow setting image order via drag and drop (show icons next to each image)
 # add text box for the dimensions to resize to (never size an image up)
@@ -138,4 +219,5 @@ $(->
 		
 	# 	error: (xhr, text_status) ->
 	# }
+
 )

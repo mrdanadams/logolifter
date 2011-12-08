@@ -48,6 +48,7 @@ body { padding-top: 40px; }
 }
 
 #canvas { 
+
 	border: 3px dashed #fff * .8;
 	/*@include single-transition(border-color, 1s, ease, 0);*/
 	/*-webkit-animation-iteration-count: 100;*/
@@ -60,3 +61,6 @@ body { padding-top: 40px; }
 
 }
 
+.controls {
+	.size { width: 3em; }
+}

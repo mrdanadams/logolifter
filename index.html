@@ -22,7 +22,7 @@
 <div class="image-result">
 	<ul class="media-grid">
 	{{#each this}}
-		<li><a href="#"><img class="thumbnail" src="{{tbUrl}}" data-src="{{unescapedUrl}}" /><span class="dimensions">{{width}}x{{height}}</span></a></li>
+		<li><a href="#"><img class="thumbnail" src="{{tbUrl}}" data-src="{{unescapedUrl}}" data-width="{{width}}" data-height="{{height}}" /><span class="dimensions">{{width}}x{{height}}</span></a></li>
 	{{/each}}
 	</ul>
 </div>
@@ -39,7 +39,7 @@
 <div class="container">
 
 <!-- TODO: add marketing guy quote -->
-<div id="about" style="display: none;">
+<div id="about" style="display: none;" class="row">
 	<h2>About</h2>
 	<p>For bloggers in particular, having something visual in your blog posts is a rule. Finding images relevant to your posts can be difficult especially if covering multiple subjects. This tool creates nice images using others found by searching.</p>
 
@@ -48,7 +48,7 @@
 	<p>Please don't steal images: check and respect the license of any images used and reference the image sources in your final material.</p>
 </div>
 
-<div id="search-form" class="search-form">
+<div id="search-form" class="search-form row">
 	<h2><span class="step">1</span> Search for images</h2>
 
 	<form action="#">
@@ -56,7 +56,7 @@
 	</form>
 </div>
 
-<div id="help" style="display: none;">
+<div id="help" style="display: none;" class="row">
 	<!--
 		search above
 		image results will appear here
@@ -65,18 +65,35 @@
 		save!
 	-->
 </div>
-<div id="image-results" class="">
+<div id="image-results" class="row">
 	<h2><span class="step">2</span> Drag images into the image below</h2>
 	<div class="images"></div>
 	<div id="google-branding"></div>
 </div>
-<div id="image-editor">
+<div id="image-editor" class="row">
 	<h2><span class="step">3</span> Customize your image</h2>
-	<canvas id="canvas" width="600" height="600"></canvas>
+	<div class="span10"><canvas id="canvas" width="550" height="400"></canvas></div>
+	<div class="span4 controls form-stacked">
+		<div class="clearfix" id="arrangements">
+			<label>Arrange images:</label>
+			<button class="btn small">Horizontal</button>
+			<button class="btn small">Vertical</button>
+		</div>
+
+		<div class="clearfix">
+			<label for="size">Max image size:</label>
+			<div class="input">
+				<input id="size" type="text" placeholder="pixels" class="size" />
+				<button class="btn">Resize</button>
+			</div>
+		</div>
+	</span>
 </div>
-<div>
-	<h2><span class="step">4</span> Save the image</h2>
-	<button id="download" class="btn large primary">Download Image</button>
+<div class="row">
+	<div class="span16">
+		<h2><span class="step">4</span> Save the image</h2>
+		<button id="download" class="btn large primary">Download Image</button>
+	</div>
 </div>
 
 
