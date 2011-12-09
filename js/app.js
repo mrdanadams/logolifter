@@ -140,32 +140,37 @@
         return this.redraw();
       },
       arrangements: {
-        horizontal: function() {
-          var canvasHeight, canvasWidth, image, padding, paddings, totalWidth, x, _i, _j, _len, _len2, _results;
-          canvasWidth = canvas.width;
-          canvasHeight = canvas.height;
-          totalWidth = 0;
+        _linear: function(primaryName, primaryAxis, secondaryName, secondaryAxis) {
+          var canvasPrimary, canvasSecondary, d, image, imagesTotal, padding, paddings, _i, _j, _len, _len2, _results;
+          canvasPrimary = canvas[primaryName];
+          canvasSecondary = canvas[secondaryName];
+          imagesTotal = 0;
           for (_i = 0, _len = images.length; _i < _len; _i++) {
             image = images[_i];
-            totalWidth += image.width;
+            imagesTotal += image[primaryName];
           }
-          padding = totalWidth * .2;
+          padding = imagesTotal * .2;
           paddings = images.length - 1;
-          if (padding + totalWidth > canvasWidth) {
-            padding = Math.min((canvasWidth - totalWidth) / paddings, 5);
+          if (padding + imagesTotal > canvasPrimary) {
+            padding = Math.min((canvasPrimary - imagesTotal) / paddings, 5);
           }
-          totalWidth += padding * paddings;
-          x = (canvasWidth - totalWidth) / 2;
+          imagesTotal += padding * paddings;
+          d = (canvasPrimary - imagesTotal) / 2;
           _results = [];
           for (_j = 0, _len2 = images.length; _j < _len2; _j++) {
             image = images[_j];
-            image.x = x;
-            image.y = (canvasHeight - image.height) / 2;
-            _results.push(x += image.width + padding);
+            image[primaryAxis] = d;
+            image[secondaryAxis] = (canvasSecondary - image[secondaryName]) / 2;
+            _results.push(d += image[primaryName] + padding);
           }
           return _results;
         },
-        vertical: function() {}
+        horizontal: function() {
+          return this._linear('width', 'x', 'height', 'y');
+        },
+        vertical: function() {
+          return this._linear('height', 'y', 'width', 'x');
+        }
       }
     };
     $(function() {

@@ -37,7 +37,7 @@ APP.Search = (->
 					# stash this away so we can get to it					
 					# workaround for http://bugs.jqueryui.com/ticket/7852
 					inst.dropTarget = img.get(0)
-					
+
 					inst.dropTarget
 
 				opacity: .6				
@@ -160,36 +160,32 @@ APP.Canvas = (->
 
 		# Calculations for arranging images in different ways
 		arrangements: {
-			horizontal: ->
-				canvasWidth = canvas.width
-				canvasHeight = canvas.height
+			_linear: (primaryName, primaryAxis, secondaryName, secondaryAxis)->
+				canvasPrimary = canvas[primaryName]
+				canvasSecondary = canvas[secondaryName]
 				
-				totalWidth = 0
+				imagesTotal = 0
 				for image in images
-					totalWidth += image.width
+					imagesTotal += image[primaryName]
 				
-				padding = totalWidth * .2
+				padding = imagesTotal * .2
 				paddings = images.length - 1
-				if padding + totalWidth > canvasWidth
-					padding = Math.min((canvasWidth - totalWidth) / paddings, 5)
+				if padding + imagesTotal > canvasPrimary
+					padding = Math.min((canvasPrimary - imagesTotal) / paddings, 5)
 				
-				totalWidth += padding * paddings
+				imagesTotal += padding * paddings
 
-				x = (canvasWidth - totalWidth) / 2
+				d = (canvasPrimary - imagesTotal) / 2
 				for image in images
-					image.x = x
-					image.y = (canvasHeight - image.height) / 2
-					x += image.width + padding
+					image[primaryAxis] = d
+					image[secondaryAxis] = (canvasSecondary - image[secondaryName]) / 2
+					d += image[primaryName] + padding
 
-
-
-
-				# calculate starting left x
-				# calculate starting positions
-				# move them
-				# TODO center vertically
+			horizontal: ->
+				this._linear 'width', 'x', 'height', 'y'
 
 			vertical: ->
+				this._linear 'height', 'y', 'width', 'x'
 
 		}
 
