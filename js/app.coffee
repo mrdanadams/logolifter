@@ -277,6 +277,8 @@ APP.Canvas.Img = (->
 # add auto-crop to put a bounding box around the images (checkbox?)
 # add buttons restricting search by size (none, icon, small, medium)
 # add validation to the resize box
+# add GA integration
+# track GA events for search
 
 # allow setting image order via drag and drop (show icons next to each image)
 # allow cropping the image
@@ -285,9 +287,6 @@ APP.Canvas.Img = (->
 
 # add some styling to the background / sections to separate the page
 # color the number bubbles and put shadows on them
-# style the about box
-# make the about link toggle, not show, the box
-# put a close link in the about box
 # style the logo to be a custom font. perhaps something scripty. make the "lifter" superscript.
 # when the page loads make the "lifter" animate upwards slowly
 
@@ -310,7 +309,11 @@ $(->
 	$('#download').click -> APP.Canvas.download()
 
 	$('.topbar a.about').click -> 
-		$('#about').slideDown()
+		$('#about').slideToggle()
+		false
+
+	$('#about .close').click ->
+		$('#about').slideToggle()
 		false
 
 	$('#arrangements').delegate 'button', 'click', ->

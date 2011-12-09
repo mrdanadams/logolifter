@@ -258,7 +258,11 @@
       return APP.Canvas.download();
     });
     $('.topbar a.about').click(function() {
-      $('#about').slideDown();
+      $('#about').slideToggle();
+      return false;
+    });
+    $('#about .close').click(function() {
+      $('#about').slideToggle();
       return false;
     });
     $('#arrangements').delegate('button', 'click', function() {

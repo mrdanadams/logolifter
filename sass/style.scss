@@ -4,6 +4,10 @@ body { padding-top: 40px; }
 
 .topbar { position: absolute; }
 
+#about {
+	p { margin-bottom: .5em; }
+}
+
 .step {
 	padding: .25em;
 	border: 2px solid #ccc;
@@ -16,9 +20,6 @@ body { padding-top: 40px; }
 	margin-left: -2em;
 }
 
-#search-form {
-	
-}
 #q {
 	width: 80%;
 	@include border-radius(1em);
