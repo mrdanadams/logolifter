@@ -120,7 +120,17 @@
         dropped = $(dropped);
         img = new APP.Canvas.Img(dropped.attr('src'), dropped.data('thumb-src'), dropped.data('width'), dropped.data('height'), x, y, ctx);
         images.unshift(img);
+        this.updateUI();
         return this.redraw();
+      },
+      updateUI: function() {
+        var image, urls, _i, _len;
+        urls = [];
+        for (_i = 0, _len = images.length; _i < _len; _i++) {
+          image = images[_i];
+          urls.push(image.sourceUrl);
+        }
+        return $('#image-sources').html(urls.join(', '));
       },
       download: function() {
         return Canvas2Image.saveAsPNG($('#canvas').get(0));
@@ -191,7 +201,7 @@
     cls = function(src, thumbSrc, width, height, x, y, ctx) {
       var img, inst;
       this.safe = false;
-      this.src = src;
+      this.src = this.sourceUrl = src;
       this.thumbSrc = thumbSrc;
       this.width = this.origWidth = width;
       this.height = this.origHeight = height;
@@ -230,8 +240,7 @@
         }
         this.scale = scale;
         this.width = this.origWidth * scale;
-        this.height = this.origHeight * scale;
-        return console.log(scale);
+        return this.height = this.origHeight * scale;
       }
     };
     return cls;

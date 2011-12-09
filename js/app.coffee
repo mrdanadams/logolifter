@@ -143,7 +143,18 @@ APP.Canvas = (->
 			img = new APP.Canvas.Img dropped.attr('src'), dropped.data('thumb-src'), dropped.data('width'), dropped.data('height'), x, y, ctx
 			#console.log(img)
 			images.unshift img
+
+			this.updateUI()
 			this.redraw()
+
+		# udpates UI after adding / removing images
+		updateUI: ->
+			urls = []
+			for image in images
+				urls.push image.sourceUrl
+			
+			$('#image-sources').html(urls.join ', ')
+
 
 		download: ->
 			Canvas2Image.saveAsPNG $('#canvas').get(0)
@@ -204,7 +215,8 @@ APP.Canvas = (->
 APP.Canvas.Img = (->
 	cls = (src, thumbSrc, width, height, x, y, ctx) ->
 		this.safe = false	 # whether it's been pulled from a different origin
-		this.src = src
+		# sourceUrl is only for source attribution
+		this.src = this.sourceUrl = src
 		this.thumbSrc = thumbSrc
 
 		# note: these must always represent the rendered width/height of the image including scale
@@ -247,7 +259,7 @@ APP.Canvas.Img = (->
 			this.scale = scale
 			this.width = this.origWidth * scale
 			this.height = this.origHeight * scale
-			console.log scale
+			# console.log scale
 
 	cls
 )()
@@ -255,20 +267,19 @@ APP.Canvas.Img = (->
 # TODOs
 # put in the current image while the other is loading when dragging the image
 # add a spinner when results are loading (they are really fast...)
-# add buttons restricting search by size (none, icon, small, medium)
 # change the canvas dimensions
 # add searching by color?
 # download all the images
 # add tooltip text to the controls
 # remove images from the canvas
-# allow opening the current image in pixlr
-# allow adding a specific URL
+# opening the current image in pixlr
+# adding a specific URL
 # add auto-crop to put a bounding box around the images (checkbox?)
+# add buttons restricting search by size (none, icon, small, medium)
+# add validation to the resize box
 
 # allow setting image order via drag and drop (show icons next to each image)
-# add text box for the dimensions to resize to (never size an image up)
 # allow cropping the image
-# allow arranging the images differently: star, circle, square, horizontal, vertical
 # show / hide guides
 # show / hide ruler
 
