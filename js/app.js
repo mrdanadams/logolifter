@@ -139,6 +139,14 @@
         this.arrangements[arrangement]();
         return this.redraw();
       },
+      resize: function(size) {
+        var image, _i, _len;
+        for (_i = 0, _len = images.length; _i < _len; _i++) {
+          image = images[_i];
+          image.scaleTo(size);
+        }
+        return this.redraw();
+      },
       arrangements: {
         _linear: function(primaryName, primaryAxis, secondaryName, secondaryAxis) {
           var canvasPrimary, canvasSecondary, d, image, imagesTotal, padding, paddings, _i, _j, _len, _len2, _results;
@@ -185,8 +193,8 @@
       this.safe = false;
       this.src = src;
       this.thumbSrc = thumbSrc;
-      this.width = width;
-      this.height = height;
+      this.width = this.origWidth = width;
+      this.height = this.origHeight = height;
       this.x = x;
       this.y = y;
       this.scale = 1;
@@ -202,9 +210,28 @@
     };
     cls.prototype = {
       draw: function(ctx) {
-        if (this.loaded) {
-          return ctx.drawImage(this.img, this.x, this.y);
+        ctx.save();
+        if (this.scale !== 1) {
+          ctx.scale(this.scale, this.scale);
         }
+        if (this.loaded) {
+          ctx.drawImage(this.img, this.x / this.scale, this.y / this.scale);
+        }
+        return ctx.restore();
+      },
+      scaleTo: function(size) {
+        var scale;
+        if (size >= this.origWidth && size >= this.origHeight) {
+          scale = 1;
+        } else if (this.origWidth > this.origHeight) {
+          scale = size / this.origWidth;
+        } else {
+          scale = size / this.origHeight;
+        }
+        this.scale = scale;
+        this.width = this.origWidth * scale;
+        this.height = this.origHeight * scale;
+        return console.log(scale);
       }
     };
     return cls;
@@ -225,8 +252,11 @@
       $('#about').slideDown();
       return false;
     });
-    return $('#arrangements').delegate('button', 'click', function() {
+    $('#arrangements').delegate('button', 'click', function() {
       return APP.Canvas.rearrange($(this).data('arrangement'));
+    });
+    return $('#resize').click(function() {
+      return APP.Canvas.resize($('#size').val());
     });
   });
 }).call(this);

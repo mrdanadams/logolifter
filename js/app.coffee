@@ -158,6 +158,11 @@ APP.Canvas = (->
 			this.arrangements[arrangement]()
 			this.redraw()
 
+		# resizes all the images to a particular size
+		resize: (size) ->
+			image.scaleTo(size) for image in images
+			this.redraw()
+
 		# Calculations for arranging images in different ways
 		arrangements: {
 			_linear: (primaryName, primaryAxis, secondaryName, secondaryAxis)->
@@ -203,8 +208,8 @@ APP.Canvas.Img = (->
 		this.thumbSrc = thumbSrc
 
 		# note: these must always represent the rendered width/height of the image including scale
-		this.width = width
-		this.height = height
+		this.width = this.origWidth = width
+		this.height = this.origHeight = height
 
 		this.x = x
 		this.y = y
@@ -224,8 +229,26 @@ APP.Canvas.Img = (->
 	cls.prototype = 
 		# draws itself onto the canvas
 		draw: (ctx) ->
-			ctx.drawImage this.img, this.x, this.y if this.loaded
+			ctx.save()
+			ctx.scale(this.scale, this.scale) if this.scale != 1
+
+			ctx.drawImage this.img, this.x / this.scale, this.y / this.scale if this.loaded
+			ctx.restore()
 			
+		# scales the image to fit in a bounding box of this size
+		scaleTo: (size) ->
+			if size >= this.origWidth and size >= this.origHeight
+				scale = 1
+			else if this.origWidth > this.origHeight
+				scale = size / this.origWidth
+			else
+				scale = size / this.origHeight
+
+			this.scale = scale
+			this.width = this.origWidth * scale
+			this.height = this.origHeight * scale
+			console.log scale
+
 	cls
 )()
 
@@ -240,6 +263,7 @@ APP.Canvas.Img = (->
 # remove images from the canvas
 # allow opening the current image in pixlr
 # allow adding a specific URL
+# add auto-crop to put a bounding box around the images (checkbox?)
 
 # allow setting image order via drag and drop (show icons next to each image)
 # add text box for the dimensions to resize to (never size an image up)
@@ -280,6 +304,8 @@ $(->
 
 	$('#arrangements').delegate 'button', 'click', ->
 		APP.Canvas.rearrange $(this).data('arrangement')
+
+	$('#resize').click -> APP.Canvas.resize $('#size').val()
 
 	# seeing if this works...
 	# $.getImageData {
