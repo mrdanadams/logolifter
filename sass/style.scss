@@ -1,8 +1,26 @@
 @import "compass/css3";
 
-body { padding-top: 40px; }
+body { 
+	padding-top: 40px;
+	padding-bottom: 2em;
+}
 
-.topbar { position: absolute; }
+.topbar { 
+	position: absolute;
+
+	h3 {
+		.first { 
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+		.second {
+			text-transform: lowercase;
+			font-size: .8em;
+			position: relative;
+			top: -.5em;
+		}
+	}
+}
 
 #about {
 	p { margin-bottom: .5em; }
@@ -10,14 +28,22 @@ body { padding-top: 40px; }
 
 .step {
 	padding: .25em;
-	border: 2px solid #ccc;
-	@include border-radius(1em);
+	/*border: 2px solid #ccc;*/
+	/*@include border-radius(1em);*/
 	display: inline-block;
 	width: 1em; height: 1em;
 	line-height: 1em;
 	text-align: center;
 	margin: .125em;
-	margin-left: -2em;
+	margin-left: -1.6em;
+	margin-right: -.25em;
+	color: #ccc;
+	@include single-text-shadow(#999, -1px, -1px, 0px);
+
+	&:after {
+		content: '.';
+		padding-left: .1em;
+	}
 }
 
 #q {

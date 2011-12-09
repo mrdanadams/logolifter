@@ -286,8 +286,7 @@ APP.Canvas.Img = (->
 # show / hide ruler
 
 # add some styling to the background / sections to separate the page
-# color the number bubbles and put shadows on them
-# style the logo to be a custom font. perhaps something scripty. make the "lifter" superscript.
+# style the logo to be a custom font. perhaps something scripty.
 # when the page loads make the "lifter" animate upwards slowly
 
 # put some links in the header to me, twitter, and cantina
