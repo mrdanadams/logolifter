@@ -4,21 +4,26 @@ this.APP = APP = {}
 APP.Search = (->
 	imageSearch = null
 	imageTemplate = null
-	
+
+	searchSizes = null
+	currentSize = null
+	lastSearch = null
 
 	obj = {
 		init: ->
+			# under the hood the presents send in an array of values. well, we don't want the defaults because small is only icons and medium has no icons and includes large images
+			searchSizes = [["icon"], ["small"], ["medium"]]
+
 			imageSearch = new google.search.ImageSearch()
 			imageSearch.setSearchCompleteCallback this, this.handleResults, null
 			imageSearch.setResultSetSize 6	# equivalent to 1 row
-			#imageSearch.setRestriction google.search.ImageSearch.RESTRICT_IMAGESIZE, google.search.ImageSearch.IMAGESIZE_MEDIUM
 
 			imageTemplate = Handlebars.compile $('#image-template').html()
 
 		handleResults: ->
 			# todo: handle no results
 			# TODO move out to a UI class
-			$('#image-results .images').empty().append imageTemplate(imageSearch.results)
+			$('#image-results .images').append imageTemplate(imageSearch.results)
 
 			$('.image-result a').draggable({
 				helper: ->
@@ -29,15 +34,32 @@ APP.Search = (->
 					img.data 'thumb-src', srcImage.attr('src')
 					img.get(0)
 
-				opacity: .6
-				
+				opacity: .6				
 			})
 
-			# todo: only do this once
+			# TODO: only do this once
 			google.search.Search.getBranding 'google-branding'
 
+			# keep searching through the set sizes
+			index = searchSizes.indexOf currentSize
+			if index > -1 and index < searchSizes.length - 1
+				currentSize = searchSizes[index + 1]	
+				this.executeSearch()	
+			
+
+		executeSearch: ->
+			# console.log currentSize
+			imageSearch.setRestriction google.search.ImageSearch.RESTRICT_IMAGESIZE, currentSize
+
+			imageSearch.execute lastSearch
+
 		search: (q) ->
-			imageSearch.execute q
+			# progressively get the images from smallest to biggest
+			currentSize = searchSizes[0]
+			lastSearch = q
+			$('#image-results .images').empty()
+			this.executeSearch()
+			
 			
 	}
 

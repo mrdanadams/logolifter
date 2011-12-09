@@ -2,18 +2,23 @@
   var APP;
   this.APP = APP = {};
   APP.Search = (function() {
-    var imageSearch, imageTemplate, obj;
+    var currentSize, imageSearch, imageTemplate, lastSearch, obj, searchSizes;
     imageSearch = null;
     imageTemplate = null;
+    searchSizes = null;
+    currentSize = null;
+    lastSearch = null;
     obj = {
       init: function() {
+        searchSizes = [["icon"], ["small"], ["medium"]];
         imageSearch = new google.search.ImageSearch();
         imageSearch.setSearchCompleteCallback(this, this.handleResults, null);
         imageSearch.setResultSetSize(6);
         return imageTemplate = Handlebars.compile($('#image-template').html());
       },
       handleResults: function() {
-        $('#image-results .images').empty().append(imageTemplate(imageSearch.results));
+        var index;
+        $('#image-results .images').append(imageTemplate(imageSearch.results));
         $('.image-result a').draggable({
           helper: function() {
             var img, srcImage;
@@ -25,10 +30,22 @@
           },
           opacity: .6
         });
-        return google.search.Search.getBranding('google-branding');
+        google.search.Search.getBranding('google-branding');
+        index = searchSizes.indexOf(currentSize);
+        if (index > -1 && index < searchSizes.length - 1) {
+          currentSize = searchSizes[index + 1];
+          return this.executeSearch();
+        }
+      },
+      executeSearch: function() {
+        imageSearch.setRestriction(google.search.ImageSearch.RESTRICT_IMAGESIZE, currentSize);
+        return imageSearch.execute(lastSearch);
       },
       search: function(q) {
-        return imageSearch.execute(q);
+        currentSize = searchSizes[0];
+        lastSearch = q;
+        $('#image-results .images').empty();
+        return this.executeSearch();
       }
     };
     google.load('search', '1');
