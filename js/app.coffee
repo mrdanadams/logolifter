@@ -4,7 +4,7 @@ this.APP = APP = {}
 APP.Search = (->
 	imageSearch = null
 	imageTemplate = null
-
+	
 	searchSizes = null
 	currentSize = null
 	lastSearch = null
@@ -25,6 +25,7 @@ APP.Search = (->
 			# TODO move out to a UI class
 			$('#image-results .images').append imageTemplate(imageSearch.results)
 
+			inst = this
 			$('.image-result a').draggable({
 				helper: ->
 					# creates an image that is the full image to be dragged so it's more representative
@@ -32,7 +33,12 @@ APP.Search = (->
 					img = srcImage.clone()
 					img.attr 'src', srcImage.attr('data-src')
 					img.data 'thumb-src', srcImage.attr('src')
-					img.get(0)
+
+					# stash this away so we can get to it					
+					# workaround for http://bugs.jqueryui.com/ticket/7852
+					inst.dropTarget = img.get(0)
+					
+					inst.dropTarget
 
 				opacity: .6				
 			})
@@ -101,9 +107,11 @@ APP.Canvas = (->
 					canvasPos = $('#canvas').position()
 					x = imgPos.left - canvasPos.left
 					y = imgPos.top - canvasPos.top
-					src = $(event.target).attr('src')
+					dropTarget = APP.Search.dropTarget
+					src = $(dropTarget).attr('src')
 
-					inst.addImage event.target, x, y
+					# console.log event
+					inst.addImage dropTarget, x, y
 			})
 
 		mousedown: (event) ->
@@ -130,6 +138,7 @@ APP.Canvas = (->
 
 		# dropped is the image dropped onto the canvas
 		addImage: (dropped, x, y) ->
+			# console.log dropped
 			dropped = $(dropped)
 			img = new APP.Canvas.Img dropped.attr('src'), dropped.data('thumb-src'), dropped.data('width'), dropped.data('height'), x, y, ctx
 			#console.log(img)
@@ -144,6 +153,46 @@ APP.Canvas = (->
 			ctx.clearRect 0, 0, canvas.width, canvas.height
 			image.draw(ctx) for image in images
 
+		# rearranges the images based on some preset
+		rearrange: (arrangement) ->
+			this.arrangements[arrangement]()
+			this.redraw()
+
+		# Calculations for arranging images in different ways
+		arrangements: {
+			horizontal: ->
+				canvasWidth = canvas.width
+				canvasHeight = canvas.height
+				
+				totalWidth = 0
+				for image in images
+					totalWidth += image.width
+				
+				padding = totalWidth * .2
+				paddings = images.length - 1
+				if padding + totalWidth > canvasWidth
+					padding = Math.min((canvasWidth - totalWidth) / paddings, 5)
+				
+				totalWidth += padding * paddings
+
+				x = (canvasWidth - totalWidth) / 2
+				for image in images
+					image.x = x
+					image.y = (canvasHeight - image.height) / 2
+					x += image.width + padding
+
+
+
+
+				# calculate starting left x
+				# calculate starting positions
+				# move them
+				# TODO center vertically
+
+			vertical: ->
+
+		}
+
 	}
 
 	$(-> obj.init())
@@ -156,8 +205,11 @@ APP.Canvas.Img = (->
 		this.safe = false	 # whether it's been pulled from a different origin
 		this.src = src
 		this.thumbSrc = thumbSrc
+
+		# note: these must always represent the rendered width/height of the image including scale
 		this.width = width
 		this.height = height
+
 		this.x = x
 		this.y = y
 		this.scale = 1		# for constraining size
@@ -180,9 +232,6 @@ APP.Canvas.Img = (->
 			
 	cls
 )()
-
-
-
 
 # TODOs
 # put in the current image while the other is loading when dragging the image
@@ -232,6 +281,9 @@ $(->
 	$('.topbar a.about').click -> 
 		$('#about').slideDown()
 		false
+
+	$('#arrangements').delegate 'button', 'click', ->
+		APP.Canvas.rearrange $(this).data('arrangement')
 
 	# seeing if this works...
 	# $.getImageData {

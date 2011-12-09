@@ -17,8 +17,9 @@
         return imageTemplate = Handlebars.compile($('#image-template').html());
       },
       handleResults: function() {
-        var index;
+        var index, inst;
         $('#image-results .images').append(imageTemplate(imageSearch.results));
+        inst = this;
         $('.image-result a').draggable({
           helper: function() {
             var img, srcImage;
@@ -26,7 +27,8 @@
             img = srcImage.clone();
             img.attr('src', srcImage.attr('data-src'));
             img.data('thumb-src', srcImage.attr('src'));
-            return img.get(0);
+            inst.dropTarget = img.get(0);
+            return inst.dropTarget;
           },
           opacity: .6
         });
@@ -79,13 +81,14 @@
           accept: '.image-result a',
           activeClass: 'drop-highlight',
           drop: function(event, ui) {
-            var canvasPos, imgPos, src, x, y;
+            var canvasPos, dropTarget, imgPos, src, x, y;
             imgPos = ui.position;
             canvasPos = $('#canvas').position();
             x = imgPos.left - canvasPos.left;
             y = imgPos.top - canvasPos.top;
-            src = $(event.target).attr('src');
-            return inst.addImage(event.target, x, y);
+            dropTarget = APP.Search.dropTarget;
+            src = $(dropTarget).attr('src');
+            return inst.addImage(dropTarget, x, y);
           }
         });
       },
@@ -131,6 +134,38 @@
           _results.push(image.draw(ctx));
         }
         return _results;
+      },
+      rearrange: function(arrangement) {
+        this.arrangements[arrangement]();
+        return this.redraw();
+      },
+      arrangements: {
+        horizontal: function() {
+          var canvasHeight, canvasWidth, image, padding, paddings, totalWidth, x, _i, _j, _len, _len2, _results;
+          canvasWidth = canvas.width;
+          canvasHeight = canvas.height;
+          totalWidth = 0;
+          for (_i = 0, _len = images.length; _i < _len; _i++) {
+            image = images[_i];
+            totalWidth += image.width;
+          }
+          padding = totalWidth * .2;
+          paddings = images.length - 1;
+          if (padding + totalWidth > canvasWidth) {
+            padding = Math.min((canvasWidth - totalWidth) / paddings, 5);
+          }
+          totalWidth += padding * paddings;
+          x = (canvasWidth - totalWidth) / 2;
+          _results = [];
+          for (_j = 0, _len2 = images.length; _j < _len2; _j++) {
+            image = images[_j];
+            image.x = x;
+            image.y = (canvasHeight - image.height) / 2;
+            _results.push(x += image.width + padding);
+          }
+          return _results;
+        },
+        vertical: function() {}
       }
     };
     $(function() {
@@ -181,9 +216,12 @@
     $('#download').click(function() {
       return APP.Canvas.download();
     });
-    return $('.topbar a.about').click(function() {
+    $('.topbar a.about').click(function() {
       $('#about').slideDown();
       return false;
+    });
+    return $('#arrangements').delegate('button', 'click', function() {
+      return APP.Canvas.rearrange($(this).data('arrangement'));
     });
   });
 }).call(this);
