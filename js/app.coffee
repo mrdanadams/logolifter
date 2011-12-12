@@ -108,7 +108,7 @@ APP.Canvas = (->
 			# TODO move out to a UI object
 			jc = $('#canvas')
 
-			for name in ['mousemove', 'mouseup', 'mousedown']
+			for name in ['mousemove', 'mouseup', 'mousedown', 'dblclick']
 				jc.bind name, inst[name]
 
 			jc.droppable({
@@ -126,16 +126,32 @@ APP.Canvas = (->
 					inst.addImage dropTarget, x, y
 			})
 
-		mousedown: (event) ->
-			# console.log event
+		# gets the image hit by the event x,y or null
+		_getHitImage: (event) ->
 			x = event.offsetX
 			y = event.offsetY
 
 			for img in images
-				if x >= img.x and y >= img.y and x <= img.x + img.width and y <= img.y + img.height
-					 dragImg = img
-					 dragX = x - img.x
-					 dragY = y - img.y
+				return img if x >= img.x and y >= img.y and x <= img.x + img.width and y <= img.y + img.height
+
+			null
+
+		dblclick: (event) ->
+			img = inst._getHitImage event
+			return if !img
+
+			index = images.indexOf img
+			images.splice index, 1
+
+			inst.updateUI()
+			inst.redraw()
+
+		mousedown: (event) ->
+			img = inst._getHitImage event
+			if img
+				dragImg = img
+				dragX = event.offsetX - img.x
+				dragY = event.offsetY - img.y
 
 		mousemove: (event) ->
 			return if dragImg == null
@@ -410,7 +426,6 @@ APP.Canvas.Img = (->
 # add searching by color?
 # download all the images
 # add tooltip text to the controls
-# remove images from the canvas
 # opening the current image in pixlr
 # adding a specific URL (image or page URL)
 # add buttons restricting search by size (none, icon, small, medium)

@@ -80,7 +80,7 @@
         ctx = canvas.getContext('2d');
         inst = this;
         jc = $('#canvas');
-        _ref = ['mousemove', 'mouseup', 'mousedown'];
+        _ref = ['mousemove', 'mouseup', 'mousedown', 'dblclick'];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           name = _ref[_i];
           jc.bind(name, inst[name]);
@@ -100,16 +100,37 @@
           }
         });
       },
-      mousedown: function(event) {
-        var img, x, y, _i, _len, _results;
+      _getHitImage: function(event) {
+        var img, x, y, _i, _len;
         x = event.offsetX;
         y = event.offsetY;
-        _results = [];
         for (_i = 0, _len = images.length; _i < _len; _i++) {
           img = images[_i];
-          _results.push(x >= img.x && y >= img.y && x <= img.x + img.width && y <= img.y + img.height ? (dragImg = img, dragX = x - img.x, dragY = y - img.y) : void 0);
+          if (x >= img.x && y >= img.y && x <= img.x + img.width && y <= img.y + img.height) {
+            return img;
+          }
         }
-        return _results;
+        return null;
+      },
+      dblclick: function(event) {
+        var img, index;
+        img = inst._getHitImage(event);
+        if (!img) {
+          return;
+        }
+        index = images.indexOf(img);
+        images.splice(index, 1);
+        inst.updateUI();
+        return inst.redraw();
+      },
+      mousedown: function(event) {
+        var img;
+        img = inst._getHitImage(event);
+        if (img) {
+          dragImg = img;
+          dragX = event.offsetX - img.x;
+          return dragY = event.offsetY - img.y;
+        }
       },
       mousemove: function(event) {
         if (dragImg === null) {
