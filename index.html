@@ -90,8 +90,17 @@
 		<div class="clearfix">
 			<label for="size">Max image size:</label>
 			<div class="input">
-				<input id="size" type="text" placeholder="pixels" class="size" />
+				<input id="size" type="text" placeholder="pixels" class="size mini" />
 				<button class="btn" id="resize">Resize</button>
+				<span class="help-block">Makes all images the same size</span>
+			</div>
+		</div>
+
+		<div class="clearfix">
+			<label for="crop">Border size:</label>
+			<div class="input">
+				<input class="mini" id="crop-size" value="" placeholder="pixels" />
+				<span class="help-block">Border size in pixels</span>
 			</div>
 		</div>
 

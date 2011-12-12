@@ -63,7 +63,7 @@
     return obj;
   })();
   APP.Canvas = (function() {
-    var canvas, ctx, dragImg, dragX, dragY, images, inst, obj;
+    var canvas, cropBorder, cropEnable, ctx, dragImg, dragX, dragY, images, inst, obj;
     ctx = null;
     canvas = null;
     images = [];
@@ -71,6 +71,8 @@
     dragX = null;
     dragY = null;
     inst = null;
+    cropEnable = true;
+    cropBorder = 0;
     obj = {
       init: function() {
         var jc, name, _i, _len, _ref;
@@ -130,6 +132,10 @@
         this.redraw();
         return img.sanitize(ctx);
       },
+      crop: function(border) {
+        cropBorder = border ? Math.max(parseInt(border), 0) : 0;
+        return this.redraw();
+      },
       updateUI: function() {
         var image, urls, _i, _len;
         urls = [];
@@ -140,7 +146,7 @@
         return $('#image-sources').html(urls.join(', '));
       },
       download: function() {
-        var canvas2, ctx2, dirty, image, proceed, _i, _len;
+        var dirty, image, proceed, _i, _len;
         dirty = [];
         for (_i = 0, _len = images.length; _i < _len; _i++) {
           image = images[_i];
@@ -148,26 +154,77 @@
             dirty.push(image);
           }
         }
-        canvas2 = $(['<canvas width="', canvas.width, '" height="', canvas.height, '"></canvas>'].join('')).get(0);
-        ctx2 = canvas2.getContext('2d');
         proceed = function() {
-          var img;
+          var canvas2, img;
           if (dirty.length > 0) {
             img = dirty.shift();
-            return img.sanitize(ctx2, proceed);
+            return img.sanitize(null, proceed);
           } else {
-            inst._redraw(ctx2, canvas2);
+            canvas2 = inst._drawCanvas();
             return Canvas2Image.saveAsPNG(canvas2);
           }
         };
         return proceed();
       },
       redraw: function() {
+        var info;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (images.length === 0) {
+          return;
+        }
+        info = this._calculateCanvas();
+        ctx.fillStyle = "#333";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(info.xMin, info.yMin, info.width, info.height);
         return this._redraw(ctx, canvas);
+      },
+      _calculateCanvas: function() {
+        var b, height, image, width, xMax, xMin, yMax, yMin, _i, _len;
+        xMin = canvas.width;
+        xMax = 0;
+        yMin = canvas.height;
+        yMax = 0;
+        for (_i = 0, _len = images.length; _i < _len; _i++) {
+          image = images[_i];
+          xMin = Math.min(xMin, image.x);
+          xMax = Math.max(xMax, image.x + image.width);
+          yMin = Math.min(yMin, image.y);
+          yMax = Math.max(yMax, image.y + image.height);
+        }
+        b = cropEnable ? cropBorder : 0;
+        xMin = xMin - b;
+        xMax = xMax + b;
+        yMin = yMin - b;
+        yMax = yMax + b;
+        width = xMax - xMin;
+        height = yMax - yMin;
+        return {
+          width: width,
+          height: height,
+          xMin: xMin,
+          xMax: xMax,
+          yMin: yMin,
+          yMax: yMax,
+          border: b
+        };
+      },
+      _drawCanvas: function() {
+        var canvas2, ctx2, info;
+        info = this._calculateCanvas();
+        canvas2 = $(['<canvas width="', info.width, '" height="', info.height, '"></canvas>'].join('')).get(0);
+        ctx2 = canvas2.getContext('2d');
+        ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+        ctx2.fillStyle = "#fff";
+        ctx2.fillRect(0, 0, info.width, info.height);
+        ctx2.save();
+        ctx2.translate(-info.xMin, -info.yMin);
+        this._redraw(ctx2, canvas2);
+        ctx2.restore();
+        return canvas2;
       },
       _redraw: function(ctx, canvas) {
         var image, _i, _len, _results;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
         _results = [];
         for (_i = 0, _len = images.length; _i < _len; _i++) {
           image = images[_i];
@@ -197,7 +254,7 @@
             image = images[_i];
             imagesTotal += image[primaryName];
           }
-          padding = imagesTotal * .2;
+          padding = imagesTotal * .1;
           paddings = images.length - 1;
           if (padding + imagesTotal > canvasPrimary) {
             padding = Math.min((canvasPrimary - imagesTotal) / paddings, 5);
@@ -294,7 +351,9 @@
         inst = this;
         img.onload = function() {
           inst.loaded = true;
-          return inst.draw(ctx);
+          if (ctx) {
+            return inst.draw(ctx);
+          }
         };
         return img.src = src;
       }
@@ -302,6 +361,7 @@
     return cls;
   })();
   $(function() {
+    var updateCrop;
     $('#search-form form').submit(function(event) {
       return false;
     });
@@ -324,8 +384,13 @@
     $('#arrangements').delegate('button', 'click', function() {
       return APP.Canvas.rearrange($(this).data('arrangement'));
     });
-    return $('#resize').click(function() {
+    $('#resize').click(function() {
       return APP.Canvas.resize($('#size').val());
     });
+    updateCrop = function() {
+      return APP.Canvas.crop($('#crop-size').val());
+    };
+    $('#crop-size').on("keyup", updateCrop);
+    return updateCrop();
   });
 }).call(this);

@@ -96,6 +96,9 @@ APP.Canvas = (->
 
 	inst = null
 
+	cropEnable = true
+	cropBorder = 0
+
 	obj = {
 		init: ->
 			canvas = $('#canvas').get(0)
@@ -157,7 +160,12 @@ APP.Canvas = (->
 			this.redraw()
 			img.sanitize ctx
 
-		# udpates UI after adding / removing images
+		crop: (border) ->
+			cropBorder = if border then Math.max(parseInt(border), 0) else 0
+			this.redraw()
+
+
+		# updates UI after internal state changes
 		updateUI: ->
 			urls = []
 			for image in images
@@ -172,31 +180,95 @@ APP.Canvas = (->
 			for image in images
 				dirty.push image if image.dirty
 
-			canvas2 = $(['<canvas width="',canvas.width,'" height="',canvas.height,'"></canvas>'].join('')).get(0)
-
-			#console.log canvas2
-			ctx2 = canvas2.getContext('2d')
-
 			proceed = ->
 				if dirty.length > 0
 					img = dirty.shift()
-					#console.log 'dirty: '+img.src
-					img.sanitize ctx2, proceed
+					img.sanitize null, proceed
 				else
-					inst._redraw ctx2, canvas2
+					canvas2 = inst._drawCanvas()
 					Canvas2Image.saveAsPNG canvas2
 
 			proceed()
 
 
-		# clears and redraws the whole canvas
+		# clears and redraws the whole canvas to the screen
 		redraw: ->
+			ctx.clearRect 0, 0, canvas.width, canvas.height
+
+			return if images.length == 0
+
+			info = this._calculateCanvas()
+
+			# cropping border
+			ctx.fillStyle = "#333"
+			ctx.fillRect 0, 0, canvas.width, canvas.height
+
+			ctx.fillStyle = "#fff"
+			ctx.fillRect info.xMin, info.yMin, info.width, info.height
+#			console.log ''+(xMin - b)+', '+(yMin - b)+', '+(xMax + b)+', '+(yMax + b)
+
 			this._redraw ctx, canvas
 
+		# provides the total bounding box of the rendered area relative to the overall canvas
+		_calculateCanvas: ->
+			xMin = canvas.width
+			xMax = 0
+			yMin = canvas.height
+			yMax = 0
+
+			for image in images
+				xMin = Math.min xMin, image.x
+				xMax = Math.max xMax, image.x + image.width
+				yMin = Math.min yMin, image.y
+				yMax = Math.max yMax, image.y + image.height
+				#console.log 'image: '+image.width+', '+image.height
+
+			b = if cropEnable then cropBorder else 0
+
+			# note: if the user pushes the image off-screen it just draws them anyway
+			xMin = xMin - b
+			xMax = xMax + b
+			yMin = yMin - b
+			yMax = yMax + b
+
+			width = xMax - xMin
+			height = yMax - yMin
+
+			{
+				width: width
+				height: height
+				xMin: xMin
+				xMax: xMax
+				yMin: yMin
+				yMax: yMax
+				border: b
+			}
+
+		# draws the image onto a new, clean canvas and returns the canvas DOM element
+		# meant for drawing a clean canvas the user can download
+		_drawCanvas: ->
+			info = this._calculateCanvas()
+#			console.log info
+			canvas2 = $(['<canvas width="',info.width,'" height="',info.height,'"></canvas>'].join('')).get(0)
+
+			ctx2 = canvas2.getContext '2d'
+			ctx2.clearRect 0, 0, canvas2.width, canvas2.height
+			
+			ctx2.fillStyle = "#fff"
+			ctx2.fillRect 0, 0, info.width, info.height
+
+			ctx2.save()
+			ctx2.translate -info.xMin, -info.yMin
+			this._redraw ctx2, canvas2
+			ctx2.restore()
+
+			canvas2			
+
+
+		# draws images onto an arbitrary canvas.
 		_redraw: (ctx, canvas) ->
-			ctx.clearRect 0, 0, canvas.width, canvas.height
-			# TODO draw a white background
 			image.draw(ctx) for image in images
+
 
 		# rearranges the images based on some preset
 		rearrange: (arrangement) ->
@@ -218,7 +290,7 @@ APP.Canvas = (->
 				for image in images
 					imagesTotal += image[primaryName]
 				
-				padding = imagesTotal * .2
+				padding = imagesTotal * .1
 				paddings = images.length - 1
 				if padding + imagesTotal > canvasPrimary
 					padding = Math.min((canvasPrimary - imagesTotal) / paddings, 5)
@@ -325,7 +397,7 @@ APP.Canvas.Img = (->
 			inst = this
 			img.onload = -> 
 				inst.loaded = true
-				inst.draw(ctx)
+				inst.draw(ctx) if ctx
 			img.src = src
 
 
@@ -341,21 +413,24 @@ APP.Canvas.Img = (->
 # remove images from the canvas
 # opening the current image in pixlr
 # adding a specific URL (image or page URL)
-# add auto-crop to put a bounding box around the images (checkbox?)
 # add buttons restricting search by size (none, icon, small, medium)
-# add validation to the resize box
+# add form validation
 # add GA integration
 # track GA events for search
 # add background color / transparent checkbox
 # pull down resources locally
 # don't clean the same image multiple times
 # customize the download filename
+# add pixlr link
+# take off the 'resize' button and make it instant
 
 # put in the background image for the initial load placeholder
 # allow setting image order via drag and drop (show icons next to each image)
-# allow cropping the image
 # show / hide guides
 # show / hide ruler
+# pull out TODOs to a separate file
+# add logos for stuff
+# add SEO stuff
 
 # add some styling to the background / sections to separate the page
 # style the logo to be a custom font. perhaps something scripty.
@@ -391,4 +466,11 @@ $(->
 		APP.Canvas.rearrange $(this).data('arrangement')
 
 	$('#resize').click -> APP.Canvas.resize $('#size').val()
+
+	updateCrop = ->
+		APP.Canvas.crop $('#crop-size').val()
+
+	$('#crop-size').on "keyup", updateCrop
+
+	updateCrop()
 )

@@ -155,8 +155,3 @@ body {
   -ms-animation: pulse 1s infinite;
   border-color: #333333;
 }
-
-/* line 92, ../sass/style.scss */
-.controls .size {
-  width: 3em;
-}
