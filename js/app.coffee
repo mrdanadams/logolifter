@@ -128,10 +128,27 @@ APP.Canvas = (->
 					inst.addImage dropTarget, x, y
 			})
 
+		# returns the x/y for the event as offsetX and offsetY not available in all browsers.
+		_getOffset: (event) ->
+			x = null
+			y = null
+
+			if event.offsetX || event.offsetY
+				x = event.offsetX
+				y = event.offsetY
+			else
+				offset = $(event.target).offset()
+				x = event.pageX - offset.left
+				y = event.pageY - offset.top
+
+			{ x:x, y:y }
+
+
 		# gets the image hit by the event x,y or null
 		_getHitImage: (event) ->
-			x = event.offsetX
-			y = event.offsetY
+			offset = inst._getOffset event
+			x = offset.x
+			y = offset.y
 
 			for img in images
 				return img if x >= img.x and y >= img.y and x <= img.x + img.width and y <= img.y + img.height
@@ -152,13 +169,15 @@ APP.Canvas = (->
 			img = inst._getHitImage event
 			if img
 				dragImg = img
-				dragX = event.offsetX - img.x
-				dragY = event.offsetY - img.y
+				offset = inst._getOffset event
+				dragX = offset.x - img.x
+				dragY = offset.y - img.y
 
 		mousemove: (event) ->
 			return if dragImg == null
-			dragImg.x = event.offsetX - dragX
-			dragImg.y = event.offsetY - dragY
+			offset = inst._getOffset event
+			dragImg.x = offset.x - dragX
+			dragImg.y = offset.y - dragY
 			inst.redraw()
 
 		mouseup: ->
@@ -427,16 +446,12 @@ APP.Canvas.Img = (->
 )()
 
 # TODOs
-# customize the download filename
 # opening the current image in pixlr
 # add form validation
 # add GA integration
 # track GA events for search
 
 # put in the background image for the initial load placeholder
-# allow setting image order via drag and drop (show icons next to each image)
-# show / hide guides
-# show / hide ruler
 # pull out TODOs to a separate file
 # add logos for stuff
 # add SEO stuff
@@ -450,15 +465,22 @@ APP.Canvas.Img = (->
 # add descriptive text to each section
 
 # Future stuff
+# other arrangements: star, circle, etc
+# when doing horizontal / vertical arrangement order them based on where they are on the canvas already
 # adding a specific URL (image or page URL)
 # searching by color
 # add buttons restricting search by size (none, icon, small, medium)
 # don't clean the same image multiple times based on url (whether it's in the image right now or not)
 # change the canvas dimensions
+# show / hide guides
+# show / hide ruler
+# allow aligning to a grid
+# Ads
 
 # Not doing
 # add a spinner when results are loading (they are really fast...)
 # Making the background transparent / non-white (for most images in the web this is useless and for most sites you'll put it on)
+# allow setting image order via drag and drop (show icons next to each image) (useless feature)
 
 
 $(->

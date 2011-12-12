@@ -101,10 +101,28 @@
           }
         });
       },
+      _getOffset: function(event) {
+        var offset, x, y;
+        x = null;
+        y = null;
+        if (event.offsetX || event.offsetY) {
+          x = event.offsetX;
+          y = event.offsetY;
+        } else {
+          offset = $(event.target).offset();
+          x = event.pageX - offset.left;
+          y = event.pageY - offset.top;
+        }
+        return {
+          x: x,
+          y: y
+        };
+      },
       _getHitImage: function(event) {
-        var img, x, y, _i, _len;
-        x = event.offsetX;
-        y = event.offsetY;
+        var img, offset, x, y, _i, _len;
+        offset = inst._getOffset(event);
+        x = offset.x;
+        y = offset.y;
         for (_i = 0, _len = images.length; _i < _len; _i++) {
           img = images[_i];
           if (x >= img.x && y >= img.y && x <= img.x + img.width && y <= img.y + img.height) {
@@ -125,20 +143,23 @@
         return inst.redraw();
       },
       mousedown: function(event) {
-        var img;
+        var img, offset;
         img = inst._getHitImage(event);
         if (img) {
           dragImg = img;
-          dragX = event.offsetX - img.x;
-          return dragY = event.offsetY - img.y;
+          offset = inst._getOffset(event);
+          dragX = offset.x - img.x;
+          return dragY = offset.y - img.y;
         }
       },
       mousemove: function(event) {
+        var offset;
         if (dragImg === null) {
           return;
         }
-        dragImg.x = event.offsetX - dragX;
-        dragImg.y = event.offsetY - dragY;
+        offset = inst._getOffset(event);
+        dragImg.x = offset.x - dragX;
+        dragImg.y = offset.y - dragY;
         return inst.redraw();
       },
       mouseup: function() {
