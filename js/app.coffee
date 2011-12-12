@@ -243,7 +243,15 @@ APP.Canvas = (->
 		redraw: ->
 			ctx.clearRect 0, 0, canvas.width, canvas.height
 
-			return if images.length == 0
+			if images.length == 0
+				ctx.save()
+				ctx.textAlign = "center"
+				ctx.font = "bold 28px Verdana"
+				ctx.fillStyle = "#999"
+				ctx.fillText "drop images here...", canvas.width / 2, 200
+				ctx.restore()
+
+				return
 
 			info = this._calculateCanvas()
 
