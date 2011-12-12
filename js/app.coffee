@@ -459,13 +459,11 @@ APP.Canvas.Img = (->
 # get the download link working sanely on both firefox and chrome
 # test in safari
 # opening the current image in pixlr
-# add form validation
 # add GA integration
 # track GA events for search
 # change google API key for launch
 # output the final dimensions of the image
 
-# put in the background image for the initial load placeholder
 # pull out TODOs to a separate file
 # add logos for stuff
 # add SEO stuff
@@ -496,6 +494,7 @@ APP.Canvas.Img = (->
 # Making the background transparent / non-white (for most images in the web this is useless and for most sites you'll put it on)
 # allow setting image order via drag and drop (show icons next to each image) (useless feature)
 # style the logo to be a custom font. perhaps something scripty.
+# put in the background image for the initial load placeholder (just leaving the page as is)
 
 
 $(->
