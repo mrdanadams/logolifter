@@ -219,6 +219,8 @@ APP.Canvas = (->
 			
 			$('#image-sources').html(urls.join ', ')
 
+			$('#download').attr 'disabled', (if images.length > 0 then null else 'disabled')
+
 		# renders a clean canvas used to prompt the download
 		download: ->
 			dirty = []
@@ -452,6 +454,7 @@ APP.Canvas.Img = (->
 # add form validation
 # add GA integration
 # track GA events for search
+# change google API key for launch
 
 # put in the background image for the initial load placeholder
 # pull out TODOs to a separate file

@@ -198,7 +198,8 @@
           image = images[_i];
           urls.push(image.sourceUrl);
         }
-        return $('#image-sources').html(urls.join(', '));
+        $('#image-sources').html(urls.join(', '));
+        return $('#download').attr('disabled', (images.length > 0 ? null : 'disabled'));
       },
       download: function() {
         var dirty, image, proceed, _i, _len;
