@@ -16,7 +16,7 @@ APP.Search = (->
 
 			imageSearch = new google.search.ImageSearch()
 			imageSearch.setSearchCompleteCallback this, this.handleResults, null
-			imageSearch.setResultSetSize 6	# equivalent to 1 row
+			imageSearch.setResultSetSize 6	# equivalent to about 1 row
 
 			imageTemplate = Handlebars.compile $('#image-template').html()
 
@@ -31,11 +31,20 @@ APP.Search = (->
 					# creates an image that is the full image to be dragged so it's more representative
 					srcImage = $('img', this)
 					img = srcImage.clone()
-					img.attr 'src', srcImage.attr('data-src')
+					img.attr 'width', img.data('width')
+					img.attr 'height', img.data('height')
 					img.data 'thumb-src', srcImage.attr('src')
 
-					# stash this away so we can get to it					
+					# load the real image off-screen and replace it when loaded
+					largeImg = new Image()
+					largeImg.onload = ->
+						img.attr 'src', largeImg.src
+					largeImg.src = srcImage.data 'src'
+
+
+					# stash this away so we can get to it. gross.
 					# workaround for http://bugs.jqueryui.com/ticket/7852
+					# TODO see if we can attach additional data to the event / element
 					inst.dropTarget = img.get(0)
 
 					inst.dropTarget
@@ -140,12 +149,13 @@ APP.Canvas = (->
 		addImage: (dropped, x, y) ->
 			# console.log dropped
 			dropped = $(dropped)
-			img = new APP.Canvas.Img dropped.attr('src'), dropped.data('thumb-src'), dropped.data('width'), dropped.data('height'), x, y, ctx
+			img = new APP.Canvas.Img dropped.attr('src'), dropped.data('src'), dropped.data('thumb-src'), dropped.data('width'), dropped.data('height'), x, y, ctx
 			#console.log(img)
-			images.unshift img
+			images.push img
 
 			this.updateUI()
 			this.redraw()
+			img.sanitize ctx
 
 		# udpates UI after adding / removing images
 		updateUI: ->
@@ -155,13 +165,37 @@ APP.Canvas = (->
 			
 			$('#image-sources').html(urls.join ', ')
 
-
+		# renders a clean canvas used to prompt the download
 		download: ->
-			Canvas2Image.saveAsPNG $('#canvas').get(0)
+			dirty = []
+
+			for image in images
+				dirty.push image if image.dirty
+
+			canvas2 = $(['<canvas width="',canvas.width,'" height="',canvas.height,'"></canvas>'].join('')).get(0)
+
+			#console.log canvas2
+			ctx2 = canvas2.getContext('2d')
+
+			proceed = ->
+				if dirty.length > 0
+					img = dirty.shift()
+					#console.log 'dirty: '+img.src
+					img.sanitize ctx2, proceed
+				else
+					inst._redraw ctx2, canvas2
+					Canvas2Image.saveAsPNG canvas2
+
+			proceed()
+
 
 		# clears and redraws the whole canvas
 		redraw: ->
+			this._redraw ctx, canvas
+
+		_redraw: (ctx, canvas) ->
 			ctx.clearRect 0, 0, canvas.width, canvas.height
+			# TODO draw a white background
 			image.draw(ctx) for image in images
 
 		# rearranges the images based on some preset
@@ -213,11 +247,14 @@ APP.Canvas = (->
 
 # Model for an image placed on the canvas
 APP.Canvas.Img = (->
-	cls = (src, thumbSrc, width, height, x, y, ctx) ->
+	cls = (src, sourceUrl, thumbSrc, width, height, x, y, ctx) ->
 		this.safe = false	 # whether it's been pulled from a different origin
-		# sourceUrl is only for source attribution
-		this.src = this.sourceUrl = src
+		# sourceUrl is only for source attribution and getting the original URL
+		this.sourceUrl = sourceUrl
 		this.thumbSrc = thumbSrc
+
+		# means this image still uses the source URL
+		this.dirty = true
 
 		# note: these must always represent the rendered width/height of the image including scale
 		this.width = this.origWidth = width
@@ -228,13 +265,7 @@ APP.Canvas.Img = (->
 		this.scale = 1		# for constraining size
 
 		# image drawn onto the canvas
-		this.img = img = new Image()
-		this.loaded = false
-		inst = this
-		img.onload = -> 
-			inst.loaded = true
-			inst.draw(ctx)
-		img.src = src
+		this._setSrc src, ctx
 
 		this
 
@@ -261,11 +292,47 @@ APP.Canvas.Img = (->
 			this.height = this.origHeight * scale
 			# console.log scale
 
+		# replaces the referenced image with one that can be downloaded
+		sanitize: (ctx, callback) ->
+			callback = callback || ->
+			if !this.dirty
+				callback()
+				return
+
+			inst = this
+			src = this.sourceUrl
+			#console.log 'cleaning: '+src
+			$.getImageData {
+				url: src
+				success: (image) ->
+					#console.log 'cleaned: '+src
+					inst._setSrc image.src, ctx
+					inst.dirty = false
+					callback()
+				
+				error: (xhr, text_status) ->
+					#console.log 'failed cleaning: '+text_status
+					callback()
+			}
+
+
+		# changes the source of the image both creating a new underlying image instance and redrawing
+		# change the Image object is important for canvas clean status
+		_setSrc: (src, ctx) ->
+			this.src = src
+			this.img = img = new Image()
+			this.loaded = false
+			inst = this
+			img.onload = -> 
+				inst.loaded = true
+				inst.draw(ctx)
+			img.src = src
+
+
 	cls
 )()
 
 # TODOs
-# put in the current image while the other is loading when dragging the image
 # add a spinner when results are loading (they are really fast...)
 # change the canvas dimensions
 # add searching by color?
@@ -273,13 +340,18 @@ APP.Canvas.Img = (->
 # add tooltip text to the controls
 # remove images from the canvas
 # opening the current image in pixlr
-# adding a specific URL
+# adding a specific URL (image or page URL)
 # add auto-crop to put a bounding box around the images (checkbox?)
 # add buttons restricting search by size (none, icon, small, medium)
 # add validation to the resize box
 # add GA integration
 # track GA events for search
+# add background color / transparent checkbox
+# pull down resources locally
+# don't clean the same image multiple times
+# customize the download filename
 
+# put in the background image for the initial load placeholder
 # allow setting image order via drag and drop (show icons next to each image)
 # allow cropping the image
 # show / hide guides
@@ -319,14 +391,4 @@ $(->
 		APP.Canvas.rearrange $(this).data('arrangement')
 
 	$('#resize').click -> APP.Canvas.resize $('#size').val()
-
-	# seeing if this works...
-	# $.getImageData {
-	# 	url: "http://www.maths.nott.ac.uk/personal/sc/images/SteveC.jpg"
-	# 	success: (image) ->
-	# 		APP.Canvas.addImage image.src, 10, 10
-		
-	# 	error: (xhr, text_status) ->
-	# }
-
 )

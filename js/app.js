@@ -22,11 +22,17 @@
         inst = this;
         $('.image-result a').draggable({
           helper: function() {
-            var img, srcImage;
+            var img, largeImg, srcImage;
             srcImage = $('img', this);
             img = srcImage.clone();
-            img.attr('src', srcImage.attr('data-src'));
+            img.attr('width', img.data('width'));
+            img.attr('height', img.data('height'));
             img.data('thumb-src', srcImage.attr('src'));
+            largeImg = new Image();
+            largeImg.onload = function() {
+              return img.attr('src', largeImg.src);
+            };
+            largeImg.src = srcImage.data('src');
             inst.dropTarget = img.get(0);
             return inst.dropTarget;
           },
@@ -118,10 +124,11 @@
       addImage: function(dropped, x, y) {
         var img;
         dropped = $(dropped);
-        img = new APP.Canvas.Img(dropped.attr('src'), dropped.data('thumb-src'), dropped.data('width'), dropped.data('height'), x, y, ctx);
-        images.unshift(img);
+        img = new APP.Canvas.Img(dropped.attr('src'), dropped.data('src'), dropped.data('thumb-src'), dropped.data('width'), dropped.data('height'), x, y, ctx);
+        images.push(img);
         this.updateUI();
-        return this.redraw();
+        this.redraw();
+        return img.sanitize(ctx);
       },
       updateUI: function() {
         var image, urls, _i, _len;
@@ -133,9 +140,32 @@
         return $('#image-sources').html(urls.join(', '));
       },
       download: function() {
-        return Canvas2Image.saveAsPNG($('#canvas').get(0));
+        var canvas2, ctx2, dirty, image, proceed, _i, _len;
+        dirty = [];
+        for (_i = 0, _len = images.length; _i < _len; _i++) {
+          image = images[_i];
+          if (image.dirty) {
+            dirty.push(image);
+          }
+        }
+        canvas2 = $(['<canvas width="', canvas.width, '" height="', canvas.height, '"></canvas>'].join('')).get(0);
+        ctx2 = canvas2.getContext('2d');
+        proceed = function() {
+          var img;
+          if (dirty.length > 0) {
+            img = dirty.shift();
+            return img.sanitize(ctx2, proceed);
+          } else {
+            inst._redraw(ctx2, canvas2);
+            return Canvas2Image.saveAsPNG(canvas2);
+          }
+        };
+        return proceed();
       },
       redraw: function() {
+        return this._redraw(ctx, canvas);
+      },
+      _redraw: function(ctx, canvas) {
         var image, _i, _len, _results;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         _results = [];
@@ -198,24 +228,17 @@
   })();
   APP.Canvas.Img = (function() {
     var cls;
-    cls = function(src, thumbSrc, width, height, x, y, ctx) {
-      var img, inst;
+    cls = function(src, sourceUrl, thumbSrc, width, height, x, y, ctx) {
       this.safe = false;
-      this.src = this.sourceUrl = src;
+      this.sourceUrl = sourceUrl;
       this.thumbSrc = thumbSrc;
+      this.dirty = true;
       this.width = this.origWidth = width;
       this.height = this.origHeight = height;
       this.x = x;
       this.y = y;
       this.scale = 1;
-      this.img = img = new Image();
-      this.loaded = false;
-      inst = this;
-      img.onload = function() {
-        inst.loaded = true;
-        return inst.draw(ctx);
-      };
-      img.src = src;
+      this._setSrc(src, ctx);
       return this;
     };
     cls.prototype = {
@@ -241,6 +264,39 @@
         this.scale = scale;
         this.width = this.origWidth * scale;
         return this.height = this.origHeight * scale;
+      },
+      sanitize: function(ctx, callback) {
+        var inst, src;
+        callback = callback || function() {};
+        if (!this.dirty) {
+          callback();
+          return;
+        }
+        inst = this;
+        src = this.sourceUrl;
+        return $.getImageData({
+          url: src,
+          success: function(image) {
+            inst._setSrc(image.src, ctx);
+            inst.dirty = false;
+            return callback();
+          },
+          error: function(xhr, text_status) {
+            return callback();
+          }
+        });
+      },
+      _setSrc: function(src, ctx) {
+        var img, inst;
+        this.src = src;
+        this.img = img = new Image();
+        this.loaded = false;
+        inst = this;
+        img.onload = function() {
+          inst.loaded = true;
+          return inst.draw(ctx);
+        };
+        return img.src = src;
       }
     };
     return cls;
