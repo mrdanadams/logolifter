@@ -93,6 +93,17 @@ body {
 	-ms-#{$name}: $expr;
 }
 
+#image-editor {
+
+	& > div {
+		margin-left: 0px;
+	}
+
+	.form-stacked {
+		padding-left: 0px;
+	}
+}
+
 #canvas { 
 
 	border: 3px dashed #fff * .8;
@@ -108,4 +119,14 @@ body {
 }
 
 .controls {
+}
+
+.addthis_toolbox {
+	float: right;
+	width: 120px;
+	padding-top: 12px;
+}
+
+#image-sources-container {
+	margin-top: 2em;
 }
