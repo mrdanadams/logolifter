@@ -239,7 +239,8 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#fff";
         ctx.fillRect(info.xMin, info.yMin, info.width, info.height);
-        return this._redraw(ctx, canvas);
+        this._redraw(ctx, canvas);
+        return $('#image-size').html('' + info.width + 'x' + info.height);
       },
       _calculateCanvas: function() {
         var b, height, image, width, xMax, xMin, yMax, yMin, _i, _len;

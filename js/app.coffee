@@ -265,6 +265,8 @@ APP.Canvas = (->
 
 			this._redraw ctx, canvas
 
+			$('#image-size').html ''+info.width+'x'+info.height
+
 		# provides the total bounding box of the rendered area relative to the overall canvas
 		_calculateCanvas: ->
 			xMin = canvas.width
@@ -462,20 +464,13 @@ APP.Canvas.Img = (->
 # add GA integration
 # track GA events for search
 # change google API key for launch
-# output the final dimensions of the image
-
-# pull out TODOs to a separate file
-# add logos for stuff
-# add SEO stuff
 
 # tighten up the overall styling on the page
 # add some styling to the background / sections to separate the page
-# put some links in the header to me, twitter, and cantina
-# stuff to put in header: blog link, twitter, github link (if checked into github, link to my blog)
-# add a credits section
 # add descriptive text to each section
 
 # Future stuff
+# independently resizing images
 # other arrangements: star, circle, etc
 # when doing horizontal / vertical arrangement order them based on where they are on the canvas already
 # adding a specific URL (image or page URL)
