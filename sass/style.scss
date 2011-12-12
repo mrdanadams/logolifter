@@ -1,4 +1,8 @@
 @import "compass/css3";
+@import "compass/utilities";
+
+@import "icon/*.png";
+@include all-icon-sprites;
 
 body { 
 	padding-top: 40px;
@@ -18,6 +22,21 @@ body {
 			font-size: .8em;
 			position: relative;
 			top: -.5em;
+		}
+	}
+
+	.social-links {
+		float: right;
+		
+		a {
+			width: 25px;
+			height: 25px;
+			padding: 0px;
+			margin: 7px 10px 0px 0px;
+		}
+
+		span {
+			display: none;
 		}
 	}
 }

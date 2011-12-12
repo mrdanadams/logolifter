@@ -1,32 +1,62 @@
-/* line 3, ../sass/style.scss */
+/* line 50, icon/*.png */
+.icon-sprite, .icon-mrdanadams, .icon-twitter {
+  background: url('/images/icon-sf73f8eceb0.png') no-repeat;
+}
+
+/* line 60, ../../../.rbenv/versions/1.9.2-p290/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.2/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.icon-mrdanadams {
+  background-position: 0 0;
+}
+
+/* line 60, ../../../.rbenv/versions/1.9.2-p290/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.2/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.icon-twitter {
+  background-position: 0 -25px;
+}
+
+/* line 7, ../sass/style.scss */
 body {
   padding-top: 40px;
   padding-bottom: 2em;
 }
 
-/* line 8, ../sass/style.scss */
+/* line 12, ../sass/style.scss */
 .topbar {
   position: absolute;
 }
-/* line 12, ../sass/style.scss */
+/* line 16, ../sass/style.scss */
 .topbar h3 .first {
   text-transform: uppercase;
   font-weight: bold;
 }
-/* line 16, ../sass/style.scss */
+/* line 20, ../sass/style.scss */
 .topbar h3 .second {
   text-transform: lowercase;
   font-size: .8em;
   position: relative;
   top: -0.5em;
 }
+/* line 28, ../sass/style.scss */
+.topbar .social-links {
+  float: right;
+}
+/* line 31, ../sass/style.scss */
+.topbar .social-links a {
+  width: 25px;
+  height: 25px;
+  padding: 0px;
+  margin: 7px 10px 0px 0px;
+}
+/* line 38, ../sass/style.scss */
+.topbar .social-links span {
+  display: none;
+}
 
-/* line 26, ../sass/style.scss */
+/* line 45, ../sass/style.scss */
 #about p {
   margin-bottom: .5em;
 }
 
-/* line 29, ../sass/style.scss */
+/* line 48, ../sass/style.scss */
 .step {
   padding: .25em;
   /*border: 2px solid #ccc;*/
@@ -42,13 +72,13 @@ body {
   color: #ccc;
   text-shadow: #999999 -1px -1px 0px;
 }
-/* line 43, ../sass/style.scss */
+/* line 62, ../sass/style.scss */
 .step:after {
   content: '.';
   padding-left: .1em;
 }
 
-/* line 49, ../sass/style.scss */
+/* line 68, ../sass/style.scss */
 #q {
   width: 80%;
   -webkit-border-radius: 1em;
@@ -58,96 +88,96 @@ body {
   border-radius: 1em;
 }
 
-/* line 55, ../sass/style.scss */
+/* line 74, ../sass/style.scss */
 .media-grid li {
   text-align: center;
 }
-/* line 56, ../sass/style.scss */
+/* line 75, ../sass/style.scss */
 .media-grid a {
   text-decoration: none !important;
 }
 
-/* line 58, ../sass/style.scss */
+/* line 77, ../sass/style.scss */
 .dimensions {
   color: #aaa;
 }
 
 @-webkit-keyframes pulse {
-  /* line 61, ../sass/style.scss */
+  /* line 80, ../sass/style.scss */
   0% {
     border-color: #cccccc;
   }
 
-  /* line 62, ../sass/style.scss */
+  /* line 81, ../sass/style.scss */
   50% {
     border-color: #333333;
   }
 
-  /* line 63, ../sass/style.scss */
+  /* line 82, ../sass/style.scss */
   100% {
     border-color: #cccccc;
   }
 }
 
 @-moz-keyframes pulse {
-  /* line 61, ../sass/style.scss */
+  /* line 80, ../sass/style.scss */
   0% {
     border-color: #cccccc;
   }
 
-  /* line 62, ../sass/style.scss */
+  /* line 81, ../sass/style.scss */
   50% {
     border-color: #333333;
   }
 
-  /* line 63, ../sass/style.scss */
+  /* line 82, ../sass/style.scss */
   100% {
     border-color: #cccccc;
   }
 }
 
 @-o-keyframes pulse {
-  /* line 61, ../sass/style.scss */
+  /* line 80, ../sass/style.scss */
   0% {
     border-color: #cccccc;
   }
 
-  /* line 62, ../sass/style.scss */
+  /* line 81, ../sass/style.scss */
   50% {
     border-color: #333333;
   }
 
-  /* line 63, ../sass/style.scss */
+  /* line 82, ../sass/style.scss */
   100% {
     border-color: #cccccc;
   }
 }
 
 @-ms-keyframes pulse {
-  /* line 61, ../sass/style.scss */
+  /* line 80, ../sass/style.scss */
   0% {
     border-color: #cccccc;
   }
 
-  /* line 62, ../sass/style.scss */
+  /* line 81, ../sass/style.scss */
   50% {
     border-color: #333333;
   }
 
-  /* line 63, ../sass/style.scss */
+  /* line 82, ../sass/style.scss */
   100% {
     border-color: #cccccc;
   }
 }
 
-/* line 77, ../sass/style.scss */
+/* line 96, ../sass/style.scss */
 #canvas {
   border: 3px dashed #cccccc;
   /*@include single-transition(border-color, 1s, ease, 0);*/
   /*-webkit-animation-iteration-count: 100;*/
   /*-webkit-animation-name: pulse;*/
 }
-/* line 84, ../sass/style.scss */
+/* line 103, ../sass/style.scss */
 #canvas.drop-highlight {
   -webkit-animation: pulse 1s infinite;
   -moz-animation: pulse 1s infinite;

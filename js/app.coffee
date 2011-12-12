@@ -446,6 +446,8 @@ APP.Canvas.Img = (->
 )()
 
 # TODOs
+# get the download link working sanely on both firefox and chrome
+# test in safari
 # opening the current image in pixlr
 # add form validation
 # add GA integration
@@ -456,11 +458,10 @@ APP.Canvas.Img = (->
 # add logos for stuff
 # add SEO stuff
 
+# tighten up the overall styling on the page
 # add some styling to the background / sections to separate the page
-# style the logo to be a custom font. perhaps something scripty.
-# when the page loads make the "lifter" animate upwards slowly
-
 # put some links in the header to me, twitter, and cantina
+# stuff to put in header: blog link, twitter, github link (if checked into github, link to my blog)
 # add a credits section
 # add descriptive text to each section
 
@@ -476,11 +477,13 @@ APP.Canvas.Img = (->
 # show / hide ruler
 # allow aligning to a grid
 # Ads
+# when the page loads make the "lifter" animate upwards slowly
 
 # Not doing
 # add a spinner when results are loading (they are really fast...)
 # Making the background transparent / non-white (for most images in the web this is useless and for most sites you'll put it on)
 # allow setting image order via drag and drop (show icons next to each image) (useless feature)
+# style the logo to be a custom font. perhaps something scripty.
 
 
 $(->
