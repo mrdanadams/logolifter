@@ -463,6 +463,7 @@ APP.Canvas.Img = (->
 # add GA integration
 # track GA events for search
 # change google API key for launch
+# output the final dimensions of the image
 
 # put in the background image for the initial load placeholder
 # pull out TODOs to a separate file
@@ -520,13 +521,23 @@ $(->
 
 	$('#arrangements').delegate 'button', 'click', ->
 		APP.Canvas.rearrange $(this).data('arrangement')
+	
 
-	$('#size').on "keyup", -> APP.Canvas.resize $(this).val()
+	validate = (e, f) ->
+		val = $(e).val()
+		parent = $(e).closest('.clearfix')
+		if val.match /^\d*$/
+			parent.removeClass 'error'
+			f val
+		else
+			parent.addClass 'error'
 
-	updateCrop = ->
-		APP.Canvas.crop $('#crop-size').val()
+	$('#size').on "keyup", ->
+		validate this, (val) -> APP.Canvas.resize val		
 
-	$('#crop-size').on "keyup", updateCrop
+	updateCrop = -> APP.Canvas.crop $('#crop-size').val()
+
+	$('#crop-size').on "keyup", -> validate this, updateCrop
 
 	updateCrop()
 )

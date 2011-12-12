@@ -415,7 +415,7 @@
     return cls;
   })();
   $(function() {
-    var updateCrop;
+    var updateCrop, validate;
     $('#search-form form').submit(function(event) {
       return false;
     });
@@ -438,13 +438,28 @@
     $('#arrangements').delegate('button', 'click', function() {
       return APP.Canvas.rearrange($(this).data('arrangement'));
     });
+    validate = function(e, f) {
+      var parent, val;
+      val = $(e).val();
+      parent = $(e).closest('.clearfix');
+      if (val.match(/^\d*$/)) {
+        parent.removeClass('error');
+        return f(val);
+      } else {
+        return parent.addClass('error');
+      }
+    };
     $('#size').on("keyup", function() {
-      return APP.Canvas.resize($(this).val());
+      return validate(this, function(val) {
+        return APP.Canvas.resize(val);
+      });
     });
     updateCrop = function() {
       return APP.Canvas.crop($('#crop-size').val());
     };
-    $('#crop-size').on("keyup", updateCrop);
+    $('#crop-size').on("keyup", function() {
+      return validate(this, updateCrop);
+    });
     return updateCrop();
   });
 }).call(this);
