@@ -99,6 +99,8 @@ APP.Canvas = (->
 	cropEnable = true
 	cropBorder = 0
 
+	imageSize = null
+
 	obj = {
 		init: ->
 			canvas = $('#canvas').get(0)
@@ -170,11 +172,20 @@ APP.Canvas = (->
 			dropped = $(dropped)
 			img = new APP.Canvas.Img dropped.attr('src'), dropped.data('src'), dropped.data('thumb-src'), dropped.data('width'), dropped.data('height'), x, y, ctx
 			#console.log(img)
+
+			img.scaleTo(imageSize) if imageSize
+
 			images.push img
 
 			this.updateUI()
 			this.redraw()
 			img.sanitize ctx
+
+		# resizes all the images to a particular size
+		resize: (size) ->
+			imageSize = if size then size else canvas.width
+			image.scaleTo(imageSize) for image in images
+			this.redraw()
 
 		crop: (border) ->
 			cropBorder = if border then Math.max(parseInt(border), 0) else 0
@@ -289,11 +300,6 @@ APP.Canvas = (->
 		# rearranges the images based on some preset
 		rearrange: (arrangement) ->
 			this.arrangements[arrangement]()
-			this.redraw()
-
-		# resizes all the images to a particular size
-		resize: (size) ->
-			image.scaleTo(size) for image in images
 			this.redraw()
 
 		# Calculations for arranging images in different ways
@@ -421,23 +427,11 @@ APP.Canvas.Img = (->
 )()
 
 # TODOs
-# add a spinner when results are loading (they are really fast...)
-# change the canvas dimensions
-# add searching by color?
-# download all the images
-# add tooltip text to the controls
+# customize the download filename
 # opening the current image in pixlr
-# adding a specific URL (image or page URL)
-# add buttons restricting search by size (none, icon, small, medium)
 # add form validation
 # add GA integration
 # track GA events for search
-# add background color / transparent checkbox
-# pull down resources locally
-# don't clean the same image multiple times
-# customize the download filename
-# add pixlr link
-# take off the 'resize' button and make it instant
 
 # put in the background image for the initial load placeholder
 # allow setting image order via drag and drop (show icons next to each image)
@@ -454,6 +448,17 @@ APP.Canvas.Img = (->
 # put some links in the header to me, twitter, and cantina
 # add a credits section
 # add descriptive text to each section
+
+# Future stuff
+# adding a specific URL (image or page URL)
+# searching by color
+# add buttons restricting search by size (none, icon, small, medium)
+# don't clean the same image multiple times based on url (whether it's in the image right now or not)
+# change the canvas dimensions
+
+# Not doing
+# add a spinner when results are loading (they are really fast...)
+# Making the background transparent / non-white (for most images in the web this is useless and for most sites you'll put it on)
 
 
 $(->
@@ -480,7 +485,7 @@ $(->
 	$('#arrangements').delegate 'button', 'click', ->
 		APP.Canvas.rearrange $(this).data('arrangement')
 
-	$('#resize').click -> APP.Canvas.resize $('#size').val()
+	$('#size').on "keyup", -> APP.Canvas.resize $(this).val()
 
 	updateCrop = ->
 		APP.Canvas.crop $('#crop-size').val()

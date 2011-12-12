@@ -63,7 +63,7 @@
     return obj;
   })();
   APP.Canvas = (function() {
-    var canvas, cropBorder, cropEnable, ctx, dragImg, dragX, dragY, images, inst, obj;
+    var canvas, cropBorder, cropEnable, ctx, dragImg, dragX, dragY, imageSize, images, inst, obj;
     ctx = null;
     canvas = null;
     images = [];
@@ -73,6 +73,7 @@
     inst = null;
     cropEnable = true;
     cropBorder = 0;
+    imageSize = null;
     obj = {
       init: function() {
         var jc, name, _i, _len, _ref;
@@ -148,10 +149,22 @@
         var img;
         dropped = $(dropped);
         img = new APP.Canvas.Img(dropped.attr('src'), dropped.data('src'), dropped.data('thumb-src'), dropped.data('width'), dropped.data('height'), x, y, ctx);
+        if (imageSize) {
+          img.scaleTo(imageSize);
+        }
         images.push(img);
         this.updateUI();
         this.redraw();
         return img.sanitize(ctx);
+      },
+      resize: function(size) {
+        var image, _i, _len;
+        imageSize = size ? size : canvas.width;
+        for (_i = 0, _len = images.length; _i < _len; _i++) {
+          image = images[_i];
+          image.scaleTo(imageSize);
+        }
+        return this.redraw();
       },
       crop: function(border) {
         cropBorder = border ? Math.max(parseInt(border), 0) : 0;
@@ -255,14 +268,6 @@
       },
       rearrange: function(arrangement) {
         this.arrangements[arrangement]();
-        return this.redraw();
-      },
-      resize: function(size) {
-        var image, _i, _len;
-        for (_i = 0, _len = images.length; _i < _len; _i++) {
-          image = images[_i];
-          image.scaleTo(size);
-        }
         return this.redraw();
       },
       arrangements: {
@@ -405,8 +410,8 @@
     $('#arrangements').delegate('button', 'click', function() {
       return APP.Canvas.rearrange($(this).data('arrangement'));
     });
-    $('#resize').click(function() {
-      return APP.Canvas.resize($('#size').val());
+    $('#size').on("keyup", function() {
+      return APP.Canvas.resize($(this).val());
     });
     updateCrop = function() {
       return APP.Canvas.crop($('#crop-size').val());
