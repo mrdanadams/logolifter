@@ -465,9 +465,9 @@ APP.Canvas.Img = (->
 )()
 
 # TODOs
-# add GA integration
+# fix the horizontal arrangement padding
 # track GA events for search
-# change google API key for launch
+# change google API key for launch? seems to work on production...
 
 # tighten up the overall styling on the page
 # add some styling to the background / sections to separate the page
