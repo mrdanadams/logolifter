@@ -74,6 +74,8 @@ APP.Search = (->
 			lastSearch = q
 			$('#image-results .images').empty()
 			this.executeSearch()
+
+			_gaq.push(['_trackEvent', 'Search', 'Submit', q])
 			
 			
 	}
@@ -200,6 +202,9 @@ APP.Canvas = (->
 			this.redraw()
 			img.sanitize ctx
 
+			_gaq.push(['_trackEvent', 'Canvas', 'Add', dropped.data('src')])
+
+
 		# resizes all the images to a particular size
 		resize: (size) ->
 			imageSize = if size then size else canvas.width
@@ -238,6 +243,8 @@ APP.Canvas = (->
 					url = canvas2.toDataURL 'image/png'
 					$('#result-image').attr('src', url)
 					$('#result-container').show()
+
+					_gaq.push(['_trackEvent', 'Canvas', 'Download', null, images.length])
 
 					top = $('#result-image').position().top
 					$('body').animate { scrollTop: top }, 600
@@ -339,6 +346,9 @@ APP.Canvas = (->
 		rearrange: (arrangement) ->
 			this.arrangements[arrangement]()
 			this.redraw()
+
+			_gaq.push(['_trackEvent', 'Canvas', 'Arrange', arrangement])
+
 
 		# Calculations for arranging images in different ways
 		arrangements: {
@@ -466,7 +476,6 @@ APP.Canvas.Img = (->
 
 # TODOs
 # fix the horizontal arrangement padding
-# track GA events for search
 # change google API key for launch? seems to work on production...
 
 # tighten up the overall styling on the page
@@ -533,11 +542,16 @@ $(->
 			parent.addClass 'error'
 
 	$('#size').on "keyup", ->
-		validate this, (val) -> APP.Canvas.resize val		
+		validate this, (val) -> APP.Canvas.resize val
 
 	updateCrop = -> APP.Canvas.crop $('#crop-size').val()
 
 	$('#crop-size').on "keyup", -> validate this, updateCrop
+
+	# for analytics, we don't want to track events for every key press
+	$('#size').change -> _gaq.push(['_trackEvent', 'Canvas', 'Resize', $(this).val()])
+	$('#crop-size').change -> _gaq.push(['_trackEvent', 'Canvas', 'Crop', $(this).val()])
+
 
 	updateCrop()
 )
