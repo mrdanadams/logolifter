@@ -5,8 +5,14 @@
 @include all-icon-sprites;
 
 body { 
-	padding-top: 40px;
+	padding-top: 60px;
 	padding-bottom: 2em;
+}
+
+.row {
+	h2 {
+		margin-bottom: .5em;
+	}
 }
 
 .topbar { 

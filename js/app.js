@@ -211,7 +211,7 @@
           }
         }
         proceed = function() {
-          var canvas2, img, url;
+          var canvas2, img, top, url;
           if (dirty.length > 0) {
             img = dirty.shift();
             return img.sanitize(null, proceed);
@@ -219,7 +219,11 @@
             canvas2 = inst._drawCanvas();
             url = canvas2.toDataURL('image/png');
             $('#result-image').attr('src', url);
-            return $('#result-container').show();
+            $('#result-container').show();
+            top = $('#result-image').position().top;
+            return $('body').animate({
+              scrollTop: top
+            }, 600);
           }
         };
         return proceed();

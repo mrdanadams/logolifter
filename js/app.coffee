@@ -239,6 +239,9 @@ APP.Canvas = (->
 					$('#result-image').attr('src', url)
 					$('#result-container').show()
 
+					top = $('#result-image').position().top
+					$('body').animate { scrollTop: top }, 600
+
 
 			proceed()
 
@@ -471,6 +474,7 @@ APP.Canvas.Img = (->
 # add descriptive text to each section
 
 # Future stuff
+# Put in checkered background instead of solid crop border
 # independently resizing images
 # other arrangements: star, circle, etc
 # when doing horizontal / vertical arrangement order them based on where they are on the canvas already

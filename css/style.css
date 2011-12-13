@@ -15,48 +15,53 @@
 
 /* line 7, ../sass/style.scss */
 body {
-  padding-top: 40px;
+  padding-top: 60px;
   padding-bottom: 2em;
 }
 
-/* line 12, ../sass/style.scss */
+/* line 13, ../sass/style.scss */
+.row h2 {
+  margin-bottom: .5em;
+}
+
+/* line 18, ../sass/style.scss */
 .topbar {
   position: absolute;
 }
-/* line 16, ../sass/style.scss */
+/* line 22, ../sass/style.scss */
 .topbar h3 .first {
   text-transform: uppercase;
   font-weight: bold;
 }
-/* line 20, ../sass/style.scss */
+/* line 26, ../sass/style.scss */
 .topbar h3 .second {
   text-transform: lowercase;
   font-size: .8em;
   position: relative;
   top: -0.5em;
 }
-/* line 28, ../sass/style.scss */
+/* line 34, ../sass/style.scss */
 .topbar .social-links {
   float: right;
 }
-/* line 31, ../sass/style.scss */
+/* line 37, ../sass/style.scss */
 .topbar .social-links a {
   width: 25px;
   height: 25px;
   padding: 0px;
   margin: 7px 10px 0px 0px;
 }
-/* line 38, ../sass/style.scss */
+/* line 44, ../sass/style.scss */
 .topbar .social-links span {
   display: none;
 }
 
-/* line 45, ../sass/style.scss */
+/* line 51, ../sass/style.scss */
 #about p {
   margin-bottom: .5em;
 }
 
-/* line 48, ../sass/style.scss */
+/* line 54, ../sass/style.scss */
 .step {
   padding: .25em;
   /*border: 2px solid #ccc;*/
@@ -72,13 +77,13 @@ body {
   color: #ccc;
   text-shadow: #999999 -1px -1px 0px;
 }
-/* line 62, ../sass/style.scss */
+/* line 68, ../sass/style.scss */
 .step:after {
   content: '.';
   padding-left: .1em;
 }
 
-/* line 68, ../sass/style.scss */
+/* line 74, ../sass/style.scss */
 #q {
   width: 80%;
   -webkit-border-radius: 1em;
@@ -88,102 +93,102 @@ body {
   border-radius: 1em;
 }
 
-/* line 74, ../sass/style.scss */
+/* line 80, ../sass/style.scss */
 .media-grid li {
   text-align: center;
 }
-/* line 75, ../sass/style.scss */
+/* line 81, ../sass/style.scss */
 .media-grid a {
   text-decoration: none !important;
 }
 
-/* line 77, ../sass/style.scss */
+/* line 83, ../sass/style.scss */
 .dimensions {
   color: #aaa;
 }
 
 @-webkit-keyframes pulse {
-  /* line 80, ../sass/style.scss */
+  /* line 86, ../sass/style.scss */
   0% {
     border-color: #cccccc;
   }
 
-  /* line 81, ../sass/style.scss */
+  /* line 87, ../sass/style.scss */
   50% {
     border-color: #333333;
   }
 
-  /* line 82, ../sass/style.scss */
+  /* line 88, ../sass/style.scss */
   100% {
     border-color: #cccccc;
   }
 }
 
 @-moz-keyframes pulse {
-  /* line 80, ../sass/style.scss */
+  /* line 86, ../sass/style.scss */
   0% {
     border-color: #cccccc;
   }
 
-  /* line 81, ../sass/style.scss */
+  /* line 87, ../sass/style.scss */
   50% {
     border-color: #333333;
   }
 
-  /* line 82, ../sass/style.scss */
+  /* line 88, ../sass/style.scss */
   100% {
     border-color: #cccccc;
   }
 }
 
 @-o-keyframes pulse {
-  /* line 80, ../sass/style.scss */
+  /* line 86, ../sass/style.scss */
   0% {
     border-color: #cccccc;
   }
 
-  /* line 81, ../sass/style.scss */
+  /* line 87, ../sass/style.scss */
   50% {
     border-color: #333333;
   }
 
-  /* line 82, ../sass/style.scss */
+  /* line 88, ../sass/style.scss */
   100% {
     border-color: #cccccc;
   }
 }
 
 @-ms-keyframes pulse {
-  /* line 80, ../sass/style.scss */
+  /* line 86, ../sass/style.scss */
   0% {
     border-color: #cccccc;
   }
 
-  /* line 81, ../sass/style.scss */
+  /* line 87, ../sass/style.scss */
   50% {
     border-color: #333333;
   }
 
-  /* line 82, ../sass/style.scss */
+  /* line 88, ../sass/style.scss */
   100% {
     border-color: #cccccc;
   }
 }
 
-/* line 98, ../sass/style.scss */
+/* line 104, ../sass/style.scss */
 #image-editor > div {
   margin-left: 0px;
 }
-/* line 102, ../sass/style.scss */
+/* line 108, ../sass/style.scss */
 #image-editor .form-stacked {
   padding-left: 0px;
 }
 
-/* line 107, ../sass/style.scss */
+/* line 113, ../sass/style.scss */
 #canvas {
   border: 3px dashed #cccccc;
 }
-/* line 110, ../sass/style.scss */
+/* line 116, ../sass/style.scss */
 #canvas.drop-highlight {
   -webkit-animation: pulse 1s infinite;
   -moz-animation: pulse 1s infinite;
@@ -192,31 +197,31 @@ body {
   border-color: #333333;
 }
 
-/* line 120, ../sass/style.scss */
+/* line 126, ../sass/style.scss */
 .addthis_toolbox {
   float: right;
   width: 120px;
   padding-top: 12px;
 }
 
-/* line 126, ../sass/style.scss */
+/* line 132, ../sass/style.scss */
 #image-sources-container {
   margin-top: 2em;
 }
 
-/* line 130, ../sass/style.scss */
+/* line 136, ../sass/style.scss */
 #result-container {
   width: 650px;
 }
-/* line 133, ../sass/style.scss */
+/* line 139, ../sass/style.scss */
 #result-container p {
   margin: 1.5em 0;
 }
-/* line 136, ../sass/style.scss */
+/* line 142, ../sass/style.scss */
 #result-container p em {
   font-weight: bold;
 }
-/* line 141, ../sass/style.scss */
+/* line 147, ../sass/style.scss */
 #result-container img {
   -webkit-box-shadow: 3px 3px 10px #333333;
   -moz-box-shadow: 3px 3px 10px #333333;
