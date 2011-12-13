@@ -105,11 +105,7 @@ body {
 }
 
 #canvas { 
-
 	border: 3px dashed #fff * .8;
-	/*@include single-transition(border-color, 1s, ease, 0);*/
-	/*-webkit-animation-iteration-count: 100;*/
-	/*-webkit-animation-name: pulse;*/
 
 	&.drop-highlight {
 		@include prefix(animation, pulse 1s infinite);
@@ -129,4 +125,22 @@ body {
 
 #image-sources-container {
 	margin-top: 2em;
+}
+
+#result-container {
+	width: 650px;
+
+	p {
+		margin: 1.5em 0;
+
+		em {
+			font-weight: bold;
+		}
+	}
+
+	img {
+		@include single-box-shadow(#333, 3px, 3px, 10px);
+		display: block;
+		margin: 0px auto;
+	}
 }

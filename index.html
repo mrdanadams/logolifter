@@ -3,7 +3,7 @@
 <head>
 	<title>Logo Lifter | Easily create images for blog posts and other content</title>
 	<meta name="robots" content="index,follow,noodp,noydir" />
-	<meta name="description" content="Create new images by searching for others and combining them. Great for creating blog post featured images." />
+	<meta name="description" content="Create new images by searching for others and combining them. Great for blog post featured images." />
 	<meta name="keywords" content="blog,blogging,featured image,image search,logos,featured image creator" />
 
 	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
@@ -12,8 +12,7 @@
 	<script src="https://www.google.com/jsapi?key=ABQIAAAA3eFefIMseom8tS_G04V1-hQ44lOeDQlX1UATTfCmEIxb6eByxRSVlEHYPipySEYkf6gREPsWCR_wRg"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-	<script src="http://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.0.beta.4.js"></script>
-	<script src="js/canvas2image.js"></script>
+	<script src="js/handlebars-1.0.0.beta.4.js"></script>
 	<script src="js/base64.js"></script>
 	<script src="js/jquery.getimagedata.min.js"></script>
 	<script src="js/app.js"></script>
@@ -129,13 +128,18 @@
 <div class="row">
 	<h2><span class="step">4</span> Save the image</h2>
 	<div class="span16">
-		<button id="download" class="btn large primary" disabled="disabled">Download Image</button>
+		<button id="download" class="btn large primary" disabled="disabled">Create Image</button>
+	</div>
+</div>
+<div class="row">
+	<div class="span16" style="display: none;" id="result-container">
+		<p><em>Right click</em> the image below and select <em>"Save Image As..."</em> (be sure it <em>ends with ".png"</em>).</p>
+		<img id="result-image" />
 	</div>
 </div>
 <div class="row" id="image-sources-container">
 	<h3>Image Sources</strong></h3>
-	<div class="span16" id="image-sources">
-	</div>
+	<div class="span16" id="image-sources">The URLs of sources images will appear here.</div>
 </div>
 
 </div>

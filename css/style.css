@@ -182,11 +182,8 @@ body {
 /* line 107, ../sass/style.scss */
 #canvas {
   border: 3px dashed #cccccc;
-  /*@include single-transition(border-color, 1s, ease, 0);*/
-  /*-webkit-animation-iteration-count: 100;*/
-  /*-webkit-animation-name: pulse;*/
 }
-/* line 114, ../sass/style.scss */
+/* line 110, ../sass/style.scss */
 #canvas.drop-highlight {
   -webkit-animation: pulse 1s infinite;
   -moz-animation: pulse 1s infinite;
@@ -195,14 +192,36 @@ body {
   border-color: #333333;
 }
 
-/* line 124, ../sass/style.scss */
+/* line 120, ../sass/style.scss */
 .addthis_toolbox {
   float: right;
   width: 120px;
   padding-top: 12px;
 }
 
-/* line 130, ../sass/style.scss */
+/* line 126, ../sass/style.scss */
 #image-sources-container {
   margin-top: 2em;
+}
+
+/* line 130, ../sass/style.scss */
+#result-container {
+  width: 650px;
+}
+/* line 133, ../sass/style.scss */
+#result-container p {
+  margin: 1.5em 0;
+}
+/* line 136, ../sass/style.scss */
+#result-container p em {
+  font-weight: bold;
+}
+/* line 141, ../sass/style.scss */
+#result-container img {
+  -webkit-box-shadow: 3px 3px 10px #333333;
+  -moz-box-shadow: 3px 3px 10px #333333;
+  -o-box-shadow: 3px 3px 10px #333333;
+  box-shadow: 3px 3px 10px #333333;
+  display: block;
+  margin: 0px auto;
 }

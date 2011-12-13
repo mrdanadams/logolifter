@@ -211,13 +211,15 @@
           }
         }
         proceed = function() {
-          var canvas2, img;
+          var canvas2, img, url;
           if (dirty.length > 0) {
             img = dirty.shift();
             return img.sanitize(null, proceed);
           } else {
             canvas2 = inst._drawCanvas();
-            return Canvas2Image.saveAsPNG(canvas2);
+            url = canvas2.toDataURL('image/png');
+            $('#result-image').attr('src', url);
+            return $('#result-container').show();
           }
         };
         return proceed();

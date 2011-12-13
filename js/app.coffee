@@ -234,7 +234,11 @@ APP.Canvas = (->
 					img.sanitize null, proceed
 				else
 					canvas2 = inst._drawCanvas()
-					Canvas2Image.saveAsPNG canvas2
+
+					url = canvas2.toDataURL 'image/png'
+					$('#result-image').attr('src', url)
+					$('#result-container').show()
+
 
 			proceed()
 
@@ -458,9 +462,6 @@ APP.Canvas.Img = (->
 )()
 
 # TODOs
-# get the download link working sanely on both firefox and chrome
-# test in safari
-# opening the current image in pixlr
 # add GA integration
 # track GA events for search
 # change google API key for launch
@@ -483,6 +484,7 @@ APP.Canvas.Img = (->
 # allow aligning to a grid
 # Ads
 # when the page loads make the "lifter" animate upwards slowly
+# opening the current image in pixlr
 
 # Not doing
 # add a spinner when results are loading (they are really fast...)
