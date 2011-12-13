@@ -475,8 +475,8 @@ APP.Canvas.Img = (->
 )()
 
 # TODOs
+# change static resource URLs to be CDN-ized
 # fix the horizontal arrangement padding
-# change google API key for launch? seems to work on production...
 
 # tighten up the overall styling on the page
 # add some styling to the background / sections to separate the page
