@@ -1,6 +1,8 @@
 @import "compass/css3";
 @import "compass/utilities";
 
+@import url(bootstrap.min.css);
+
 @import "icon/*.png";
 @include all-icon-sprites;
 
