@@ -1,8 +1,10 @@
 # Logo Lifter
 
-Hosted at [http://logolifter.com](http://logolifter.com)
+[https://github.com/mrdanadams/logolifter](https://github.com/mrdanadams/logolifter)
 
 An absurb little project for easily creating images for blog posts with other images from the internet. See [this post](http://mrdanadams.com/2011/logo-lifter-launched-for-easier-creation-of-blog-post-featured-images/) for the announcement and why it was made.
+
+Hosted at [http://logolifter.com](http://logolifter.com)
 
 ## Contributing
 
