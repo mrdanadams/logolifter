@@ -475,8 +475,10 @@ APP.Canvas.Img = (->
 )()
 
 # TODOs
-# change static resource URLs to be CDN-ized
+# fix the width x height label going to floating point
 # fix the horizontal arrangement padding
+# remove jquery UI and replace with something smaller than just does drag and drop
+# refactor to more intelligent event logging
 
 # tighten up the overall styling on the page
 # add some styling to the background / sections to separate the page
